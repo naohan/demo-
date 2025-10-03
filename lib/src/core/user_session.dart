@@ -30,9 +30,9 @@ enum UserRole {
       case UserRole.usuario:
         return '/home';
       case UserRole.psicologo:
-        return '/community-mind';
+        return '/home-psychologist';
       case UserRole.entrenador:
-        return '/community-vital';
+        return '/home-trainer';
     }
   }
 }

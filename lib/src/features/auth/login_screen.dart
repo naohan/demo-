@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../onboarding/onboarding_screen.dart';
 import 'register_screen.dart';
-import '../community/mind/community_mind_screen.dart';
-import '../community/vital/community_vital_screen.dart';
 import '../../core/user_session.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -65,9 +63,9 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_roleIndex == 0) {
       Navigator.pushReplacementNamed(context, OnboardingScreen.route);
     } else if (_roleIndex == 1) {
-      Navigator.pushReplacementNamed(context, CommunityMindScreen.route);
+      Navigator.pushReplacementNamed(context, '/home-psychologist');
     } else {
-      Navigator.pushReplacementNamed(context, CommunityVitalScreen.route);
+      Navigator.pushReplacementNamed(context, '/home-trainer');
     }
   }
 
