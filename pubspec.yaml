@@ -65,6 +65,11 @@ flutter:
     - assets/home/mente_plena.png
     - assets/home/pista.png
     - assets/home/zona_vital.png
+    - assets/bienestar_fisico/carreras.png
+    - assets/bienestar_fisico/correr.png
+    - assets/bienestar_fisico/futbol.png
+    - assets/bienestar_fisico/natacion.png
+    - assets/bienestar_fisico/reproducir.png
     - assets/audio/
 
   # An image asset can refer to one or more resolution-specific "variants", see

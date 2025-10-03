@@ -84,8 +84,8 @@ class UserBaseLayout extends StatelessWidget {
         actions: [
           ...?actions,
           Container(
-            margin: const EdgeInsets.only(right: 16),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            margin: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -95,7 +95,7 @@ class UserBaseLayout extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: const Color(0xFF4A90A4).withOpacity(0.3),
                 width: 1,
@@ -106,6 +106,7 @@ class UserBaseLayout extends StatelessWidget {
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF2C3E50),
+                fontSize: 14,
               ),
             ),
           ),

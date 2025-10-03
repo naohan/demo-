@@ -8,7 +8,9 @@ import 'features/home/home_screen.dart';
 import 'features/home/home_psychologist.dart';
 import 'features/home/home_trainer.dart';
 import 'features/community/mind/community_mind_screen.dart';
+import 'features/community/mind/community_mind_interactive_screen.dart';
 import 'features/community/vital/community_vital_screen.dart';
+import 'features/community/vital/community_vital_interactive_screen.dart';
 import 'features/community/vital/trainers_screen.dart';
 import 'features/wellbeing/physical_wellbeing_screen.dart';
 import 'features/wellbeing/mental_wellbeing_screen.dart';
@@ -35,6 +37,7 @@ class CalmmindApp extends StatelessWidget {
     return MaterialApp(
       title: 'Serenity',
       theme: buildCalmmindTheme(),
+      debugShowCheckedModeBanner: false,
       initialRoute: SplashScreen.route,
       routes: {
         SplashScreen.route: (_) => const SplashScreen(),
@@ -46,7 +49,9 @@ class CalmmindApp extends StatelessWidget {
         HomePsychologistScreen.route: (_) => const HomePsychologistScreen(),
         HomeTrainerScreen.route: (_) => const HomeTrainerScreen(),
         CommunityMindScreen.route: (_) => const CommunityMindScreen(),
+        CommunityMindInteractiveScreen.route: (_) => const CommunityMindInteractiveScreen(),
         CommunityVitalScreen.route: (_) => const CommunityVitalScreen(),
+        CommunityVitalInteractiveScreen.route: (_) => const CommunityVitalInteractiveScreen(),
         TrainersScreen.route: (_) => const TrainersScreen(),
         PhysicalWellbeingScreen.route: (_) => const PhysicalWellbeingScreen(),
         MentalWellbeingScreen.route: (_) => const MentalWellbeingScreen(),
