@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/base_layout.dart';
+import '../../widgets/psychologist_base_layout.dart';
 
 enum PatientMood { happy, neutral, sad }
 
@@ -118,7 +118,7 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
 
   @override
   Widget build(BuildContext context) {
-    return BaseLayout(
+    return PsychologistBaseLayout(
       title: 'Dashboard',
       child: FadeTransition(
         opacity: _fadeAnimation,

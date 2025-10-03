@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../widgets/base_layout.dart';
+import '../../../widgets/psychologist_base_layout.dart';
 
 class CommunityMindScreen extends StatefulWidget {
   static const route = '/community-mind';
@@ -14,7 +14,7 @@ class _CommunityMindScreenState extends State<CommunityMindScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BaseLayout(
+    return PsychologistBaseLayout(
       title: 'Comunidad Zona Mental',
       child: Padding(
         padding: const EdgeInsets.all(20.0),

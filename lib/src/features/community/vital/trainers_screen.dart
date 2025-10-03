@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../widgets/base_layout.dart';
+import '../../../widgets/trainer_base_layout.dart';
 
 class TrainersScreen extends StatefulWidget {
   static const route = '/trainers';
@@ -17,7 +17,7 @@ class _TrainersScreenState extends State<TrainersScreen>
 
   final TextEditingController _searchController = TextEditingController();
   String _selectedCity = 'Todas las ciudades';
-  
+
   // Lista de entrenadores
   final List<Trainer> _trainers = [
     Trainer(
@@ -30,7 +30,8 @@ class _TrainersScreenState extends State<TrainersScreen>
       experience: '8 años',
       price: 50,
       avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-      description: 'Especialista en entrenamiento de fuerza y acondicionamiento físico. Certificado en NSCA.',
+      description:
+          'Especialista en entrenamiento de fuerza y acondicionamiento físico. Certificado en NSCA.',
       specialties: ['Fuerza', 'Acondicionamiento', 'Perder peso'],
       availability: 'Lun-Vie: 6:00-20:00',
     ),
@@ -44,7 +45,8 @@ class _TrainersScreenState extends State<TrainersScreen>
       experience: '6 años',
       price: 40,
       avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
-      description: 'Instructora certificada de Yoga y Pilates. Enfoque en bienestar integral.',
+      description:
+          'Instructora certificada de Yoga y Pilates. Enfoque en bienestar integral.',
       specialties: ['Yoga', 'Pilates', 'Flexibilidad'],
       availability: 'Lun-Sáb: 7:00-19:00',
     ),
@@ -58,7 +60,8 @@ class _TrainersScreenState extends State<TrainersScreen>
       experience: '5 años',
       price: 45,
       avatar: 'https://randomuser.me/api/portraits/men/3.jpg',
-      description: 'Entrenador certificado de CrossFit con experiencia en competiciones.',
+      description:
+          'Entrenador certificado de CrossFit con experiencia en competiciones.',
       specialties: ['CrossFit', 'HIIT', 'Competencia'],
       availability: 'Lun-Vie: 5:00-21:00',
     ),
@@ -72,7 +75,8 @@ class _TrainersScreenState extends State<TrainersScreen>
       experience: '7 años',
       price: 35,
       avatar: 'https://randomuser.me/api/portraits/women/4.jpg',
-      description: 'Maratonista profesional y entrenadora de running. Especializada en resistencia.',
+      description:
+          'Maratonista profesional y entrenadora de running. Especializada en resistencia.',
       specialties: ['Running', 'Cardio', 'Maratones'],
       availability: 'Lun-Dom: 6:00-18:00',
     ),
@@ -86,7 +90,8 @@ class _TrainersScreenState extends State<TrainersScreen>
       experience: '10 años',
       price: 60,
       avatar: 'https://randomuser.me/api/portraits/men/5.jpg',
-      description: 'Culturista profesional con amplia experiencia en entrenamiento de hipertrofia.',
+      description:
+          'Culturista profesional con amplia experiencia en entrenamiento de hipertrofia.',
       specialties: ['Culturismo', 'Hipertrofia', 'Nutrición'],
       availability: 'Lun-Sáb: 6:00-22:00',
     ),
@@ -100,19 +105,25 @@ class _TrainersScreenState extends State<TrainersScreen>
       experience: '4 años',
       price: 42,
       avatar: 'https://randomuser.me/api/portraits/women/6.jpg',
-      description: 'Especialista en fitness funcional y entrenamiento personalizado.',
+      description:
+          'Especialista en fitness funcional y entrenamiento personalizado.',
       specialties: ['Funcional', 'Personalizado', 'Rehabilitación'],
       availability: 'Lun-Vie: 7:00-20:00',
     ),
   ];
 
   List<Trainer> get _filteredTrainers {
-    var filtered = _trainers.where((trainer) {
-      final nameMatch = trainer.name.toLowerCase().contains(_searchController.text.toLowerCase());
-      final cityMatch = _selectedCity == 'Todas las ciudades' || trainer.city == _selectedCity;
-      return nameMatch && cityMatch;
-    }).toList();
-    
+    var filtered =
+        _trainers.where((trainer) {
+          final nameMatch = trainer.name.toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          );
+          final cityMatch =
+              _selectedCity == 'Todas las ciudades' ||
+              trainer.city == _selectedCity;
+          return nameMatch && cityMatch;
+        }).toList();
+
     // Ordenar por rating
     filtered.sort((a, b) => b.rating.compareTo(a.rating));
     return filtered;
@@ -152,7 +163,7 @@ class _TrainersScreenState extends State<TrainersScreen>
 
   @override
   Widget build(BuildContext context) {
-    return BaseLayout(
+    return TrainerBaseLayout(
       title: 'Entrenadores',
       hero: AnimatedBuilder(
         animation: _fadeAnimation,
@@ -193,11 +204,9 @@ class _TrainersScreenState extends State<TrainersScreen>
               // Barra de búsqueda
               _buildSearchSection(),
               const SizedBox(height: 20),
-              
+
               // Lista de entrenadores
-              Expanded(
-                child: _buildTrainersList(),
-              ),
+              Expanded(child: _buildTrainersList()),
             ],
           ),
         ),
@@ -239,7 +248,7 @@ class _TrainersScreenState extends State<TrainersScreen>
             ),
           ),
           const SizedBox(height: 16),
-          
+
           // Filtro por ciudad
           Row(
             children: [
@@ -259,18 +268,19 @@ class _TrainersScreenState extends State<TrainersScreen>
                   value: _selectedCity,
                   isExpanded: true,
                   underline: Container(),
-                  items: _cities.map((city) {
-                    return DropdownMenuItem<String>(
-                      value: city,
-                      child: Text(
-                        city,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                    );
-                  }).toList(),
+                  items:
+                      _cities.map((city) {
+                        return DropdownMenuItem<String>(
+                          value: city,
+                          child: Text(
+                            city,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        );
+                      }).toList(),
                   onChanged: (value) {
                     setState(() {
                       _selectedCity = value!;
@@ -280,7 +290,7 @@ class _TrainersScreenState extends State<TrainersScreen>
               ),
             ],
           ),
-          
+
           // Contador de resultados
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -308,11 +318,7 @@ class _TrainersScreenState extends State<TrainersScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.search_off,
-              size: 64,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.search_off, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
               'No se encontraron entrenadores',
@@ -325,10 +331,7 @@ class _TrainersScreenState extends State<TrainersScreen>
             const SizedBox(height: 8),
             Text(
               'Intenta con otros criterios de búsqueda',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[500],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
             ),
           ],
         ),
@@ -351,10 +354,7 @@ class _TrainersScreenState extends State<TrainersScreen>
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Colors.white,
-            const Color(0xFF3498DB).withOpacity(0.05),
-          ],
+          colors: [Colors.white, const Color(0xFF3498DB).withOpacity(0.05)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -399,10 +399,7 @@ class _TrainersScreenState extends State<TrainersScreen>
                     const SizedBox(height: 4),
                     Text(
                       trainer.specialty,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 4),
                     Row(
@@ -428,7 +425,10 @@ class _TrainersScreenState extends State<TrainersScreen>
               Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFF2ECC71),
                       borderRadius: BorderRadius.circular(12),
@@ -436,11 +436,7 @@ class _TrainersScreenState extends State<TrainersScreen>
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(
-                          Icons.star,
-                          color: Colors.white,
-                          size: 14,
-                        ),
+                        const Icon(Icons.star, color: Colors.white, size: 14),
                         const SizedBox(width: 4),
                         Text(
                           trainer.rating.toString(),
@@ -456,17 +452,14 @@ class _TrainersScreenState extends State<TrainersScreen>
                   const SizedBox(height: 4),
                   Text(
                     '${trainer.reviews} reseñas',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.grey[500],
-                    ),
+                    style: TextStyle(fontSize: 10, color: Colors.grey[500]),
                   ),
                 ],
               ),
             ],
           ),
           const SizedBox(height: 16),
-          
+
           // Descripción
           Text(
             trainer.description,
@@ -477,31 +470,35 @@ class _TrainersScreenState extends State<TrainersScreen>
             ),
           ),
           const SizedBox(height: 12),
-          
+
           // Especialidades
           Wrap(
             spacing: 8,
             runSpacing: 4,
-            children: trainer.specialties.map((specialty) {
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF3498DB).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  specialty,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF3498DB),
-                  ),
-                ),
-              );
-            }).toList(),
+            children:
+                trainer.specialties.map((specialty) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF3498DB).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      specialty,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF3498DB),
+                      ),
+                    ),
+                  );
+                }).toList(),
           ),
           const SizedBox(height: 16),
-          
+
           // Información adicional y botón
           Row(
             children: [
@@ -529,11 +526,7 @@ class _TrainersScreenState extends State<TrainersScreen>
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(
-                          Icons.work,
-                          size: 14,
-                          color: Colors.grey[600],
-                        ),
+                        Icon(Icons.work, size: 14, color: Colors.grey[600]),
                         const SizedBox(width: 4),
                         Text(
                           '${trainer.experience} de experiencia',
@@ -560,17 +553,14 @@ class _TrainersScreenState extends State<TrainersScreen>
                   ),
                   const Text(
                     'por sesión',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.grey,
-                    ),
+                    style: TextStyle(fontSize: 10, color: Colors.grey),
                   ),
                 ],
               ),
             ],
           ),
           const SizedBox(height: 16),
-          
+
           // Botón de contacto
           SizedBox(
             width: double.infinity,
@@ -596,49 +586,51 @@ class _TrainersScreenState extends State<TrainersScreen>
   void _contactTrainer(Trainer trainer) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text('Contactar a ${trainer.name}'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(trainer.avatar),
-              child: const Icon(Icons.person, size: 40),
+      builder:
+          (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-            const SizedBox(height: 16),
-            Text(
-              '¿Cómo te gustaría contactar a ${trainer.name}?',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[700],
+            title: Text('Contactar a ${trainer.name}'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircleAvatar(
+                  radius: 40,
+                  backgroundImage: NetworkImage(trainer.avatar),
+                  child: const Icon(Icons.person, size: 40),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  '¿Cómo te gustaría contactar a ${trainer.name}?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancelar'),
               ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Mensaje enviado a ${trainer.name}'),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.message),
+                label: const Text('Enviar Mensaje'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF3498DB),
+                  foregroundColor: Colors.white,
+                ),
+              ),
+            ],
           ),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Mensaje enviado a ${trainer.name}')),
-              );
-            },
-            icon: const Icon(Icons.message),
-            label: const Text('Enviar Mensaje'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF3498DB),
-              foregroundColor: Colors.white,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

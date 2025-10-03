@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/base_layout.dart';
+import '../../widgets/trainer_base_layout.dart';
 
 class TrainerProfileScreen extends StatefulWidget {
   static const route = '/profile-trainer';
@@ -60,7 +60,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseLayout(
+    return TrainerBaseLayout(
       title: 'Mi Perfil Entrenador',
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

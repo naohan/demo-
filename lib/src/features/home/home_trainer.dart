@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/base_layout.dart';
+import '../../widgets/trainer_base_layout.dart';
 
 class HomeTrainerScreen extends StatefulWidget {
   static const route = '/home-trainer';
@@ -14,7 +14,7 @@ class _HomeTrainerScreenState extends State<HomeTrainerScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BaseLayout(
+    return TrainerBaseLayout(
       title: 'Home Entrenador',
       hero: Container(
         padding: const EdgeInsets.all(20),

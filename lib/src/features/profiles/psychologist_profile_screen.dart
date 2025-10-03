@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/base_layout.dart';
+import '../../widgets/psychologist_base_layout.dart';
 
 class PsychologistProfileScreen extends StatefulWidget {
   static const route = '/profile-psychologist';
@@ -52,7 +52,7 @@ class _PsychologistProfileScreenState extends State<PsychologistProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseLayout(
+    return PsychologistBaseLayout(
       title: 'Mi Perfil Profesional',
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

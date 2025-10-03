@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../widgets/base_layout.dart';
+import '../../../widgets/trainer_base_layout.dart';
 import 'trainers_screen.dart';
 
 class CommunityVitalScreen extends StatefulWidget {
@@ -112,7 +112,7 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
 
   @override
   Widget build(BuildContext context) {
-    return BaseLayout(
+    return TrainerBaseLayout(
       title: 'Comunidad Zona Vital',
       hero: AnimatedBuilder(
         animation: _fadeAnimation,
