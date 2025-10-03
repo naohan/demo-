@@ -1,31 +1,21 @@
 import 'package:flutter/material.dart';
 import '../../widgets/psychologist_base_layout.dart';
 
-enum PatientMood { happy, neutral, sad }
+enum AnxietyLevel { leve, moderado, severo }
 
-class Patient {
+class PatientReport {
   final String name;
-  final String lastName;
   final String avatar;
-  final PatientMood mood;
+  final String diagnosis;
+  final AnxietyLevel level;
+  final String recommendations;
 
-  Patient({
+  PatientReport({
     required this.name,
-    required this.lastName,
     required this.avatar,
-    required this.mood,
-  });
-}
-
-class Session {
-  final String time;
-  final String patientName;
-  final String patientAvatar;
-
-  Session({
-    required this.time,
-    required this.patientName,
-    required this.patientAvatar,
+    required this.diagnosis,
+    required this.level,
+    required this.recommendations,
   });
 }
 
@@ -44,68 +34,35 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
-  final List<Patient> _activePatients = [
-    Patient(
-      name: 'María',
-      lastName: 'González',
-      avatar:
-          'https://ui-avatars.com/api/?name=Maria+Gonzalez&background=f8f9fa&color=495057&size=128',
-      mood: PatientMood.happy,
-    ),
-    Patient(
-      name: 'Carlos',
-      lastName: 'Mendoza',
-      avatar:
-          'https://ui-avatars.com/api/?name=Carlos+Mendoza&background=e3f2fd&color=1976d2&size=128',
-      mood: PatientMood.neutral,
-    ),
-    Patient(
-      name: 'Ana',
-      lastName: 'Rodríguez',
-      avatar:
-          'https://ui-avatars.com/api/?name=Ana+Rodriguez&background=fce4ec&color=c2185b&size=128',
-      mood: PatientMood.sad,
-    ),
-    Patient(
-      name: 'Luis',
-      lastName: 'Hernández',
-      avatar:
-          'https://ui-avatars.com/api/?name=Luis+Hernandez&background=e8f5e8&color=388e3c&size=128',
-      mood: PatientMood.happy,
-    ),
-    Patient(
-      name: 'Sofia',
-      lastName: 'Martín',
-      avatar:
-          'https://ui-avatars.com/api/?name=Sofia+Martin&background=f3e5f5&color=7b1fa2&size=128',
-      mood: PatientMood.neutral,
-    ),
-  ];
+  // Puntuación semanal del psicólogo
+  final int weeklyScore = 78;
+  final double weeklyProgress = 0.78; // 78%
 
-  final List<Session> _upcomingSessions = [
-    Session(
-      time: '2:00 PM',
-      patientName: 'María González',
-      patientAvatar:
-          'https://ui-avatars.com/api/?name=Maria+Gonzalez&background=f8f9fa&color=495057&size=128',
+  // Informes recientes de pacientes
+  final List<PatientReport> _recentReports = [
+    PatientReport(
+      name: 'Ana García',
+      avatar:
+          'https://ui-avatars.com/api/?name=Ana+Garcia&background=3b82f6&color=ffffff&size=128',
+      diagnosis: 'Ansiedad',
+      level: AnxietyLevel.leve,
+      recommendations: 'Respiración 4-7, exposición',
     ),
-    Session(
-      time: '4:30 PM',
-      patientName: 'Juan Pérez',
-      patientAvatar:
-          'https://ui-avatars.com/api/?name=Juan+Perez&background=e8f5e8&color=2e7d32&size=128',
+    PatientReport(
+      name: 'Luis Pérez',
+      avatar:
+          'https://ui-avatars.com/api/?name=Luis+Perez&background=3b82f6&color=ffffff&size=128',
+      diagnosis: 'Ansiedad',
+      level: AnxietyLevel.moderado,
+      recommendations: 'Respiración 4-7, exposición',
     ),
-    Session(
-      time: '6:00 PM',
-      patientName: 'Carla Sánchez',
-      patientAvatar:
-          'https://ui-avatars.com/api/?name=Carla+Sanchez&background=fff3e0&color=f57c00&size=128',
-    ),
-    Session(
-      time: '9:00 AM',
-      patientName: 'Luis Hernández',
-      patientAvatar:
-          'https://ui-avatars.com/api/?name=Luis+Hernandez&background=e8f5e8&color=388e3c&size=128',
+    PatientReport(
+      name: 'Carla Ruiz',
+      avatar:
+          'https://ui-avatars.com/api/?name=Carla+Ruiz&background=3b82f6&color=ffffff&size=128',
+      diagnosis: 'Ansiedad',
+      level: AnxietyLevel.leve,
+      recommendations: 'Respiración 4-7, exposición',
     ),
   ];
 
@@ -145,7 +102,7 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
   @override
   Widget build(BuildContext context) {
     return PsychologistBaseLayout(
-      title: 'Dashboard',
+      title: '',
       child: FadeTransition(
         opacity: _fadeAnimation,
         child: SlideTransition(
@@ -155,20 +112,20 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Saludo personalizado
-                _buildWelcomeSection(),
+                // Header personalizado
+                _buildHeader(),
                 const SizedBox(height: 24),
 
-                // Pacientes activos
-                _buildActivePatientsSection(),
+                // Puntuación semanal
+                _buildWeeklyScore(),
                 const SizedBox(height: 24),
 
-                // Próximas sesiones
-                _buildUpcomingSessionsSection(),
+                // Botones de acción rápida
+                _buildQuickActions(),
                 const SizedBox(height: 24),
 
-                // Botones de acción
-                _buildActionButtons(),
+                // Informes recientes
+                _buildRecentReports(),
               ],
             ),
           ),
@@ -177,286 +134,524 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
     );
   }
 
-  Widget _buildWelcomeSection() {
+  // Helper method para obtener el texto del nivel de ansiedad
+  String _getAnxietyLevelText(AnxietyLevel level) {
+    switch (level) {
+      case AnxietyLevel.leve:
+        return 'leve';
+      case AnxietyLevel.moderado:
+        return 'moderado';
+      case AnxietyLevel.severo:
+        return 'severo';
+    }
+  }
+
+  Widget _buildHeader() {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            const Color(0xFF6B73FF).withOpacity(0.1),
-            const Color(0xFF9DD5EA).withOpacity(0.1),
-          ],
         ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF3B82F6).withOpacity(0.3),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Icons.psychology, color: Colors.white, size: 28),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Hola, Dra. Andrea',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Tienes ${_recentReports.length} pacientes activos hoy',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white.withOpacity(0.8),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(
+              Icons.notifications_outlined,
+              color: Colors.white,
+              size: 24,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWeeklyScore() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: const Offset(0, 3),
           ),
         ],
+        border: Border.all(
+          color: const Color(0xFF3B82F6).withOpacity(0.1),
+          width: 1,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Hola, Dra. Andrea',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: const Color(0xFF2C3E50),
-              letterSpacing: 0.5,
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF3B82F6).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.trending_up,
+                  color: Color(0xFF3B82F6),
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Puntuación semanal',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFF6B7280),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Text(
+                weeklyScore.toString(),
+                style: const TextStyle(
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF3B82F6),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF10B981).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.arrow_upward,
+                      color: Color(0xFF10B981),
+                      size: 16,
+                    ),
+                    SizedBox(width: 2),
+                    Text(
+                      '+12%',
+                      style: TextStyle(
+                        color: Color(0xFF10B981),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            height: 8,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: const Color(0xFFE5E7EB),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: weeklyProgress,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
+                  ),
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            'Que tengas un día lleno de paz y sanación 🌿',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-              height: 1.4,
-            ),
+            'Excelente progreso esta semana',
+            style: TextStyle(fontSize: 12, color: const Color(0xFF6B7280)),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildActivePatientsSection() {
+  Widget _buildQuickActions() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Pacientes activos',
+        const Text(
+          'Acciones rápidas',
           style: TextStyle(
             fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: const Color(0xFF2C3E50),
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1F2937),
           ),
         ),
         const SizedBox(height: 16),
-        ...List.generate(_activePatients.length, (index) {
-          final patient = _activePatients[index];
+        Row(
+          children: [
+            Expanded(
+              child: _buildActionCard(
+                icon: Icons.people_outline,
+                title: 'Pacientes',
+                subtitle: '${_recentReports.length} activos',
+                color: const Color(0xFF3B82F6),
+                onTap: () => _navigateToPatients(),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildActionCard(
+                icon: Icons.calendar_today_outlined,
+                title: 'Agenda',
+                subtitle: '3 citas hoy',
+                color: const Color(0xFF10B981),
+                onTap: () => _showSnackBar('Agenda próximamente'),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildActionCard(
+                icon: Icons.assessment_outlined,
+                title: 'Reportes',
+                subtitle: 'Ver estadísticas',
+                color: const Color(0xFF8B5CF6),
+                onTap: () => _showSnackBar('Reportes próximamente'),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildActionCard(
+                icon: Icons.note_add_outlined,
+                title: 'Nueva Nota',
+                subtitle: 'Agregar registro',
+                color: const Color(0xFFF59E0B),
+                onTap: () => _showSnackBar('Nueva nota próximamente'),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionCard({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+          border: Border.all(color: color.withOpacity(0.1), width: 1),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, color: color, size: 24),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF1F2937),
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              subtitle,
+              style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _navigateToPatients() {
+    Navigator.pushNamed(context, '/patients-list');
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: const Color(0xFF3B82F6),
+      ),
+    );
+  }
+
+  Widget _buildRecentReports() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Informes recientes',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1F2937),
+          ),
+        ),
+        const SizedBox(height: 16),
+        ...List.generate(_recentReports.length, (index) {
+          final report = _recentReports[index];
           return Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            child: _buildPatientCard(patient, index),
+            margin: const EdgeInsets.only(bottom: 16),
+            child: _buildReportCard(report),
           );
         }),
       ],
     );
   }
 
-  Widget _buildPatientCard(Patient patient, int index) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 600 + (index * 100)),
-      curve: Curves.easeOutCubic,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-        border: Border.all(color: Colors.grey.withOpacity(0.1), width: 1),
-      ),
-      child: Row(
-        children: [
-          // Avatar del paciente
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: CircleAvatar(
-              radius: 24,
-              backgroundImage: NetworkImage(patient.avatar),
-              backgroundColor: Colors.grey[200],
-              onBackgroundImageError: (exception, stackTrace) {
-                // En caso de error, se mostrará el backgroundColor
-              },
-              child:
-                  patient.avatar.isEmpty
-                      ? Icon(Icons.person, color: Colors.grey[600], size: 30)
-                      : null,
-            ),
-          ),
-          const SizedBox(width: 16),
-
-          // Información del paciente
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  patient.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF2C3E50),
-                  ),
-                ),
-                Text(
-                  patient.lastName,
-                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                ),
-              ],
-            ),
-          ),
-
-          // Indicador de estado de ánimo
-          _buildMoodIndicator(patient.mood),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMoodIndicator(PatientMood mood) {
-    IconData icon;
-    Color color;
-
-    switch (mood) {
-      case PatientMood.happy:
-        icon = Icons.sentiment_very_satisfied;
-        color = const Color(0xFF2ECC71);
-        break;
-      case PatientMood.neutral:
-        icon = Icons.sentiment_neutral;
-        color = const Color(0xFFF39C12);
-        break;
-      case PatientMood.sad:
-        icon = Icons.sentiment_dissatisfied;
-        color = const Color(0xFF95A5A6);
-        break;
-    }
-
+  Widget _buildReportCard(PatientReport report) {
     return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        shape: BoxShape.circle,
-      ),
-      child: Icon(icon, color: color, size: 24),
-    );
-  }
-
-  Widget _buildUpcomingSessionsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Próximas sesiones',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: const Color(0xFF2C3E50),
-          ),
-        ),
-        const SizedBox(height: 16),
-        ...List.generate(_upcomingSessions.length, (index) {
-          final session = _upcomingSessions[index];
-          return Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            child: _buildSessionCard(session, index),
-          );
-        }),
-      ],
-    );
-  }
-
-  Widget _buildSessionCard(Session session, int index) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 800 + (index * 100)),
-      curve: Curves.easeOutCubic,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
           ),
         ],
         border: Border.all(
-          color: const Color(0xFF6B73FF).withOpacity(0.1),
+          color: const Color(0xFF3B82F6).withOpacity(0.1),
           width: 1,
         ),
       ),
       child: Row(
         children: [
-          // Avatar del paciente
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF6B73FF).withOpacity(0.2),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
+          // Avatar del paciente con indicador de estado
+          Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: const Color(0xFF3B82F6), width: 3),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF3B82F6).withOpacity(0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(session.patientAvatar),
-              backgroundColor: Colors.grey[200],
-              onBackgroundImageError: (exception, stackTrace) {
-                // En caso de error, se mostrará el backgroundColor
-              },
-              child:
-                  session.patientAvatar.isEmpty
-                      ? Icon(Icons.person, color: Colors.grey[600], size: 24)
-                      : null,
-            ),
+                child: CircleAvatar(
+                  radius: 28,
+                  backgroundImage: NetworkImage(report.avatar),
+                  backgroundColor: const Color(0xFF3B82F6),
+                  onBackgroundImageError: (exception, stackTrace) {
+                    // En caso de error, se mostrará el backgroundColor
+                  },
+                ),
+              ),
+              Positioned(
+                bottom: 2,
+                right: 2,
+                child: Container(
+                  width: 16,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    color: _getStatusColor(report.level),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(width: 16),
 
-          // Información de la sesión
+          // Información del reporte
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  children: [
+                    Text(
+                      report.name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1F2937),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: _getStatusColor(report.level).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        _getAnxietyLevelText(report.level).toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: _getStatusColor(report.level),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
                 Text(
-                  session.time,
+                  'Dx: ${report.diagnosis}',
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF6B73FF),
+                    fontSize: 14,
+                    color: Color(0xFF6B7280),
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
+                const SizedBox(height: 4),
                 Text(
-                  session.patientName,
-                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                  'Recs: ${report.recommendations}',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF9CA3AF),
+                  ),
                 ),
               ],
             ),
           ),
 
-          // Flecha indicadora
+          // Botón Ver detalle mejorado
           Container(
-            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFF6B73FF).withOpacity(0.1),
-              shape: BoxShape.circle,
+              gradient: const LinearGradient(
+                colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
+              ),
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF3B82F6).withOpacity(0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
-            child: const Icon(
-              Icons.arrow_forward_ios,
-              color: Color(0xFF6B73FF),
-              size: 16,
+            child: ElevatedButton(
+              onPressed: () {
+                // Acción para ver detalles
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Ver detalles de ${report.name}'),
+                    backgroundColor: const Color(0xFF3B82F6),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                elevation: 0,
+                shadowColor: Colors.transparent,
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Ver detalle',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(width: 4),
+                  Icon(Icons.arrow_forward_ios, size: 12),
+                ],
+              ),
             ),
           ),
         ],
@@ -464,74 +659,14 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
     );
   }
 
-  Widget _buildActionButtons() {
-    return Row(
-      children: [
-        Expanded(
-          child: _buildActionButton(
-            icon: Icons.edit_note,
-            label: 'Nueva nota',
-            color: const Color(0xFF6B73FF),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Función de notas en desarrollo')),
-              );
-            },
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: _buildActionButton(
-            icon: Icons.lightbulb_outline,
-            label: 'Recomendación',
-            color: const Color(0xFF2ECC71),
-            onTap: () {
-              Navigator.pushNamed(context, '/community-mind');
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: color.withOpacity(0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: Colors.white, size: 20),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  Color _getStatusColor(AnxietyLevel level) {
+    switch (level) {
+      case AnxietyLevel.leve:
+        return const Color(0xFF10B981);
+      case AnxietyLevel.moderado:
+        return const Color(0xFFF59E0B);
+      case AnxietyLevel.severo:
+        return const Color(0xFFEF4444);
+    }
   }
 }

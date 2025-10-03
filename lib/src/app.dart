@@ -20,6 +20,12 @@ import 'features/profiles/trainer_profile_screen.dart';
 import 'features/auth/register_screen.dart';
 import 'features/profile/profile_screen.dart';
 import 'features/profile/profile_router_screen.dart';
+import 'features/patients/patients_list_screen.dart';
+import 'features/patients/patient_detail_screen.dart';
+import 'features/patients/patient_calendar_screen.dart';
+import 'features/patients/patient_notes_screen.dart';
+import 'features/patients/patient_chat_screen.dart';
+import 'features/patients/patient_messages_screen.dart';
 
 class CalmmindApp extends StatelessWidget {
   const CalmmindApp({super.key});
@@ -53,6 +59,32 @@ class CalmmindApp extends StatelessWidget {
         TrainerProfileScreen.route: (_) => const TrainerProfileScreen(),
         ProfileScreen.route: (_) => const ProfileScreen(),
         ProfileRouterScreen.route: (_) => const ProfileRouterScreen(),
+        PatientsListScreen.route: (_) => const PatientsListScreen(),
+        PatientDetailScreen.route: (context) {
+          final patientName =
+              ModalRoute.of(context)?.settings.arguments as String?;
+          return PatientDetailScreen(patientName: patientName);
+        },
+        PatientCalendarScreen.route: (context) {
+          final patientName =
+              ModalRoute.of(context)?.settings.arguments as String?;
+          return PatientCalendarScreen(patientName: patientName);
+        },
+        PatientNotesScreen.route: (context) {
+          final patientName =
+              ModalRoute.of(context)?.settings.arguments as String?;
+          return PatientNotesScreen(patientName: patientName);
+        },
+        PatientChatScreen.route: (context) {
+          final patientName =
+              ModalRoute.of(context)?.settings.arguments as String?;
+          return PatientChatScreen(patientName: patientName);
+        },
+        PatientMessagesScreen.route: (context) {
+          final patientName =
+              ModalRoute.of(context)?.settings.arguments as String?;
+          return PatientMessagesScreen(patientName: patientName);
+        },
       },
     );
   }
