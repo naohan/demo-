@@ -19,6 +19,7 @@ import 'features/profiles/psychologist_profile_screen.dart';
 import 'features/profiles/trainer_profile_screen.dart';
 import 'features/auth/register_screen.dart';
 import 'features/profile/profile_screen.dart';
+import 'features/profile/profile_router_screen.dart';
 
 class CalmmindApp extends StatelessWidget {
   const CalmmindApp({super.key});
@@ -51,6 +52,7 @@ class CalmmindApp extends StatelessWidget {
             (_) => const PsychologistProfileScreen(),
         TrainerProfileScreen.route: (_) => const TrainerProfileScreen(),
         ProfileScreen.route: (_) => const ProfileScreen(),
+        ProfileRouterScreen.route: (_) => const ProfileRouterScreen(),
       },
     );
   }

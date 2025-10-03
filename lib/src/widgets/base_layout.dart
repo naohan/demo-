@@ -97,7 +97,7 @@ class _BottomNav extends StatelessWidget {
       case '/wellbeing-mental':
         currentIndex = 2;
         break;
-      case '/profile':
+      case '/profile-router':
         currentIndex = 3;
         break;
       default:
@@ -118,7 +118,7 @@ class _BottomNav extends StatelessWidget {
           Navigator.pushReplacementNamed(context, '/wellbeing-mental');
           break;
         case 3:
-          Navigator.pushReplacementNamed(context, '/profile');
+          Navigator.pushReplacementNamed(context, '/profile-router');
           break;
       }
     }
@@ -385,7 +385,7 @@ class _RoleBasedDrawer extends StatelessWidget {
             context,
             icon: Icons.person_outline,
             title: 'Perfil',
-            route: '/profile',
+            route: '/profile-router',
           ),
           const Divider(height: 32),
           _buildDrawerItem(
@@ -444,7 +444,7 @@ class _RoleBasedDrawer extends StatelessWidget {
             context,
             icon: Icons.person_outline,
             title: 'Mi Perfil',
-            route: '/profile',
+            route: '/profile-router',
           ),
           const Divider(height: 32),
           _buildDrawerItem(
@@ -503,7 +503,7 @@ class _RoleBasedDrawer extends StatelessWidget {
             context,
             icon: Icons.person_outline,
             title: 'Mi Perfil',
-            route: '/profile',
+            route: '/profile-router',
           ),
           const Divider(height: 32),
           _buildDrawerItem(
