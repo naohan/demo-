@@ -62,6 +62,9 @@ flutter:
   assets:
     - assets/logo/logo_S.png
     - assets/mascota/mascota.png
+    - assets/home/mente_plena.png
+    - assets/home/pista.png
+    - assets/home/zona_vital.png
     - assets/audio/
 
   # An image asset can refer to one or more resolution-specific "variants", see
