@@ -25,7 +25,7 @@ ThemeData buildCalmmindTheme() {
       bodyColor: Colors.black87,
       displayColor: Colors.black87,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: cream,
       elevation: 2,
       margin: const EdgeInsets.all(12),

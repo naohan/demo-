@@ -7,14 +7,19 @@ class PsychologistProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Perfil del Psicólogo')),
+      appBar: AppBar(
+        automaticallyImplyLeading: false, // Quitar botón de regreso automático
+        title: const Text('Perfil del Psicólogo'),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: const [
           ListTile(
             leading: CircleAvatar(child: Icon(Icons.psychology)),
             title: Text('Nombre: Dra. María López'),
-            subtitle: Text('Especialidad: TCC • Experiencia: 10 años • Colegiatura: 12345'),
+            subtitle: Text(
+              'Especialidad: TCC • Experiencia: 10 años • Colegiatura: 12345',
+            ),
           ),
           Card(
             child: Padding(
@@ -22,7 +27,10 @@ class PsychologistProfileScreen extends StatelessWidget {
               child: Text('Descripción breve del enfoque.'),
             ),
           ),
-          ListTile(title: Text('Redes sociales'), subtitle: Text('@dramarialopez')),
+          ListTile(
+            title: Text('Redes sociales'),
+            subtitle: Text('@dramarialopez'),
+          ),
           Divider(),
           ListTile(title: Text('Acceso al paciente (con firma digital):')),
           ListTile(title: Text('• Preguntas de estado de ánimo')),

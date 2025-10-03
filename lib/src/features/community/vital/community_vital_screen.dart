@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../widgets/base_layout.dart';
 import 'trainers_screen.dart';
+import '../../../core/user_session.dart';
 
 class CommunityVitalScreen extends StatefulWidget {
   static const route = '/community-vital';
@@ -23,7 +24,8 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
       title: "¿Cómo empezar con el cardio?",
       author: "María González",
       authorAvatar: "https://randomuser.me/api/portraits/women/1.jpg",
-      content: "Hola comunidad! Soy nueva en esto del ejercicio y quiero empezar con cardio. ¿Algún consejo para principiantes?",
+      content:
+          "Hola comunidad! Soy nueva en esto del ejercicio y quiero empezar con cardio. ¿Algún consejo para principiantes?",
       likes: 12,
       comments: 8,
       timeAgo: "2 horas",
@@ -35,7 +37,8 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
       title: "Rutina de fuerza para casa",
       author: "Carlos Ruiz",
       authorAvatar: "https://randomuser.me/api/portraits/men/2.jpg",
-      content: "Comparto mi rutina de fuerza que hago en casa. Solo necesitas unas pesas básicas y mucha motivación! 💪",
+      content:
+          "Comparto mi rutina de fuerza que hago en casa. Solo necesitas unas pesas básicas y mucha motivación! 💪",
       likes: 24,
       comments: 15,
       timeAgo: "4 horas",
@@ -47,7 +50,8 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
       title: "Recuperación después del ejercicio",
       author: "Ana Martínez",
       authorAvatar: "https://randomuser.me/api/portraits/women/3.jpg",
-      content: "La recuperación es tan importante como el ejercicio. ¿Qué hacen ustedes para recuperarse mejor?",
+      content:
+          "La recuperación es tan importante como el ejercicio. ¿Qué hacen ustedes para recuperarse mejor?",
       likes: 18,
       comments: 12,
       timeAgo: "6 horas",
@@ -59,7 +63,8 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
       title: "Motivación para seguir entrenando",
       author: "Pedro López",
       authorAvatar: "https://randomuser.me/api/portraits/men/4.jpg",
-      content: "A veces es difícil mantener la motivación. ¿Cuáles son sus tips para no rendirse?",
+      content:
+          "A veces es difícil mantener la motivación. ¿Cuáles son sus tips para no rendirse?",
       likes: 31,
       comments: 22,
       timeAgo: "1 día",
@@ -71,7 +76,8 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
       title: "Alimentación pre y post entrenamiento",
       author: "Laura Sánchez",
       authorAvatar: "https://randomuser.me/api/portraits/women/5.jpg",
-      content: "¿Qué comen antes y después de entrenar? Busco ideas saludables y fáciles de preparar.",
+      content:
+          "¿Qué comen antes y después de entrenar? Busco ideas saludables y fáciles de preparar.",
       likes: 15,
       comments: 9,
       timeAgo: "1 día",
@@ -107,37 +113,61 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final userSession = UserSession();
+
     return BaseLayout(
-      title: 'Comunidad Zona Vital',
-      hero: AnimatedBuilder(
-        animation: _fadeAnimation,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: 0.9 + (_fadeAnimation.value * 0.1),
-            child: Opacity(
-              opacity: _fadeAnimation.value,
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      const Color(0xFF3498DB).withOpacity(0.1),
-                      const Color(0xFF2ECC71).withOpacity(0.05),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.fitness_center,
-                  size: 64,
-                  color: Color(0xFF3498DB),
-                ),
-              ),
+      title: 'Home - ${userSession.userName ?? "Entrenador"}',
+      hero: Column(
+        children: [
+          // Saludo personalizado
+          Text(
+            '¡Hola, Coach ${userSession.userName?.split(' ').first ?? "Entrenador"}!',
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: const Color(0xFF3498DB),
             ),
-          );
-        },
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Impulsa el rendimiento de tus clientes',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: Colors.grey[600],
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Icono animado
+          AnimatedBuilder(
+            animation: _fadeAnimation,
+            builder: (context, child) {
+              return Transform.scale(
+                scale: 0.9 + (_fadeAnimation.value * 0.1),
+                child: Opacity(
+                  opacity: _fadeAnimation.value,
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xFF3498DB).withOpacity(0.1),
+                          const Color(0xFF2ECC71).withOpacity(0.05),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.fitness_center,
+                      size: 48,
+                      color: Color(0xFF3498DB),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       child: FadeTransition(
         opacity: _fadeAnimation,
@@ -145,18 +175,20 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
           position: _slideAnimation,
           child: Column(
             children: [
+              // Sección de accesos rápidos para entrenadores
+              _buildQuickAccessSection(),
+              const SizedBox(height: 20),
+
               // Botón de encontrar entrenador
               _buildFindTrainerSection(),
               const SizedBox(height: 20),
-              
+
               // Header del foro
               _buildForumHeader(),
               const SizedBox(height: 16),
-              
+
               // Lista del foro
-              Expanded(
-                child: _buildForumList(),
-              ),
+              Expanded(child: _buildForumList()),
             ],
           ),
         ),
@@ -200,9 +232,9 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
               ),
               const SizedBox(width: 16),
               Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     const Text(
                       '¿Necesitas un entrenador?',
                       style: TextStyle(
@@ -213,10 +245,7 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
                     ),
                     Text(
                       'Encuentra el entrenador perfecto para tus objetivos',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                   ],
                 ),
@@ -227,7 +256,8 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: () => Navigator.pushNamed(context, TrainersScreen.route),
+              onPressed:
+                  () => Navigator.pushNamed(context, TrainersScreen.route),
               icon: const Icon(Icons.search),
               label: const Text('Encuentra a tu Entrenador'),
               style: ElevatedButton.styleFrom(
@@ -268,11 +298,7 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
               color: const Color(0xFF2ECC71).withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(
-              Icons.forum,
-              color: Color(0xFF2ECC71),
-              size: 24,
-            ),
+            child: const Icon(Icons.forum, color: Color(0xFF2ECC71), size: 24),
           ),
           const SizedBox(width: 12),
           const Expanded(
@@ -333,10 +359,7 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            const Color(0xFF2ECC71).withOpacity(0.05),
-            Colors.white,
-          ],
+          colors: [const Color(0xFF2ECC71).withOpacity(0.05), Colors.white],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -373,10 +396,7 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
                     ),
                     Text(
                       post.timeAgo,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                     ),
                   ],
                 ),
@@ -393,13 +413,13 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF3498DB),
-                    ),
                   ),
                 ),
-              ],
+              ),
+            ],
           ),
           const SizedBox(height: 12),
-          
+
           // Título del post
           Text(
             post.title,
@@ -410,7 +430,7 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
             ),
           ),
           const SizedBox(height: 8),
-          
+
           // Contenido del post
           Text(
             post.content,
@@ -423,7 +443,7 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 12),
-          
+
           // Acciones del post
           Row(
             children: [
@@ -439,10 +459,7 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
                     const SizedBox(width: 4),
                     Text(
                       '${post.likes}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                     ),
                   ],
                 ),
@@ -451,7 +468,7 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
               InkWell(
                 onTap: () => _showPostComments(post),
                 child: Row(
-                children: [
+                  children: [
                     Icon(
                       Icons.comment_outlined,
                       color: Colors.grey[600],
@@ -460,10 +477,7 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
                     const SizedBox(width: 4),
                     Text(
                       '${post.comments}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                     ),
                   ],
                 ),
@@ -473,10 +487,7 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
                 onPressed: () => _showPostComments(post),
                 child: const Text(
                   'Ver más',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF3498DB),
-                  ),
+                  style: TextStyle(fontSize: 12, color: Color(0xFF3498DB)),
                 ),
               ),
             ],
@@ -509,131 +520,273 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
   void _showCreatePostDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Crear Nuevo Post'),
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Título',
-                border: OutlineInputBorder(),
+      builder:
+          (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text('Crear Nuevo Post'),
+            content: const Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Título',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Contenido',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 3,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancelar'),
               ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Contenido',
-                border: OutlineInputBorder(),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Post creado exitosamente!')),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2ECC71),
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('Publicar'),
               ),
-              maxLines: 3,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Post creado exitosamente!')),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF2ECC71),
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Publicar'),
-          ),
-        ],
-      ),
     );
   }
 
   void _showPostComments(ForumPost post) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(post.title),
-        content: SizedBox(
-          width: double.maxFinite,
-          height: 400,
-          child: Column(
-            children: [
+      builder:
+          (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: Text(post.title),
+            content: SizedBox(
+              width: double.maxFinite,
+              height: 400,
+              child: Column(
+                children: [
                   Expanded(
-                child: ListView(
-                  children: List.generate(
-                    post.comments,
-                    (index) => Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                          children: [
-                              CircleAvatar(
-                                radius: 12,
-                                backgroundImage: NetworkImage(
-                                  'https://randomuser.me/api/portraits/${index % 2 == 0 ? 'men' : 'women'}/${index + 1}.jpg',
-                                ),
-                                child: const Icon(Icons.person, size: 16),
+                    child: ListView(
+                      children: List.generate(
+                        post.comments,
+                        (index) => Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 12,
+                                    backgroundImage: NetworkImage(
+                                      'https://randomuser.me/api/portraits/${index % 2 == 0 ? 'men' : 'women'}/${index + 1}.jpg',
+                                    ),
+                                    child: const Icon(Icons.person, size: 16),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Usuario ${index + 1}',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(width: 8),
+                              const SizedBox(height: 8),
                               Text(
-                                'Usuario ${index + 1}',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
+                                'Este es un comentario de ejemplo sobre el post. Muy útil! 👍',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[700],
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Este es un comentario de ejemplo sobre el post. Muy útil! 👍',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Escribe tu comentario...',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.send),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cerrar'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  Widget _buildQuickAccessSection() {
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.primaryColor.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: theme.primaryColor.withOpacity(0.2)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Panel de Control',
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: const Color(0xFF3498DB),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _TrainerQuickAccessCard(
+                  icon: Icons.groups,
+                  title: 'Mis Clientes',
+                  subtitle: 'Gestionar entrenamientos',
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Próximamente: Gestión de clientes'),
+                      ),
+                    );
+                  },
                 ),
               ),
-              const SizedBox(height: 12),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Escribe tu comentario...',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.send),
-                    onPressed: () {},
-                  ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _TrainerQuickAccessCard(
+                  icon: Icons.fitness_center,
+                  title: 'Rutinas',
+                  subtitle: 'Crear y editar',
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Próximamente: Editor de rutinas'),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _TrainerQuickAccessCard(
+                  icon: Icons.trending_up,
+                  title: 'Progreso',
+                  subtitle: 'Ver estadísticas',
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Próximamente: Análisis de progreso'),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cerrar'),
-          ),
         ],
+      ),
+    );
+  }
+}
+
+// Widget para los accesos rápidos del entrenador
+class _TrainerQuickAccessCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _TrainerQuickAccessCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFF3498DB).withOpacity(0.3)),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF3498DB).withOpacity(0.1),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Icon(icon, size: 32, color: const Color(0xFF3498DB)),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF3498DB),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: Colors.grey[600],
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

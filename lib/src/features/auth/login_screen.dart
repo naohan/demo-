@@ -3,6 +3,7 @@ import '../onboarding/onboarding_screen.dart';
 import 'register_screen.dart';
 import '../community/mind/community_mind_screen.dart';
 import '../community/vital/community_vital_screen.dart';
+import '../../core/user_session.dart';
 
 class LoginScreen extends StatefulWidget {
   static const route = '/login';
@@ -53,6 +54,14 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    // Guardar la sesión del usuario
+    final userSession = UserSession();
+    userSession.setUserSession(
+      role: UserRole.fromIndex(_roleIndex),
+      name: user, // Usamos el usuario como nombre temporal
+      email: user, // Usamos el usuario como email temporal
+    );
+
     if (_roleIndex == 0) {
       Navigator.pushReplacementNamed(context, OnboardingScreen.route);
     } else if (_roleIndex == 1) {
@@ -65,41 +74,43 @@ class _LoginScreenState extends State<LoginScreen> {
   void _showCorporateDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: const [
-            Icon(Icons.business, color: Colors.blue),
-            SizedBox(width: 8),
-            Text('Acceso Corporativo'),
-          ],
-        ),
-        content: TextField(
-          decoration: const InputDecoration(
-            labelText: 'Código corporativo',
-            border: OutlineInputBorder(),
-            prefixIcon: Icon(Icons.vpn_key),
+      builder:
+          (context) => AlertDialog(
+            title: Row(
+              children: const [
+                Icon(Icons.business, color: Colors.blue),
+                SizedBox(width: 8),
+                Text('Acceso Corporativo'),
+              ],
+            ),
+            content: TextField(
+              decoration: const InputDecoration(
+                labelText: 'Código corporativo',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.vpn_key),
+              ),
+              obscureText: true,
+              onSubmitted: (code) {
+                if (code == 'CORP2024') {
+                  // Código de ejemplo
+                  Navigator.pushReplacementNamed(context, '/home');
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Código corporativo inválido'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancelar'),
+              ),
+            ],
           ),
-          obscureText: true,
-          onSubmitted: (code) {
-            if (code == 'CORP2024') { // Código de ejemplo
-              Navigator.pushReplacementNamed(context, '/home');
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Código corporativo inválido'),
-                  backgroundColor: Colors.red,
-                ),
-              );
-            }
-          },
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-        ],
-      ),
     );
   }
 
@@ -128,10 +139,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false, // Quitar botón de regreso automático
         title: const Text('Iniciar Sesión'),
         centerTitle: true,
         elevation: 0,
@@ -170,27 +182,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Logo y título
-                  Image.asset(
-                    'assets/logo/logo_S.png',
-                    height: 64,
-                    width: 64,
-                  ),
+                  Image.asset('assets/logo/logo_S.png', height: 64, width: 64),
                   const SizedBox(height: 16),
                   const Text(
                     '¡Bienvenido a Serenity!',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Inicia sesión para continuar',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
@@ -198,13 +200,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Selector de rol
                   const Text(
                     'Selecciona tu perfil:',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 12),
-                  
+
                   // Tarjetas de rol con diseño mejorado
                   Container(
                     decoration: BoxDecoration(
@@ -286,8 +285,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       fillColor: Colors.white,
                     ),
                     keyboardType: TextInputType.emailAddress,
-                    validator: (v) =>
-                        (v == null || v.isEmpty) ? 'Ingresa tu correo' : null,
+                    validator:
+                        (v) =>
+                            (v == null || v.isEmpty)
+                                ? 'Ingresa tu correo'
+                                : null,
                   ),
                   const SizedBox(height: 16),
 
@@ -316,8 +318,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       fillColor: Colors.white,
                     ),
                     obscureText: _obscurePassword,
-                    validator: (v) =>
-                        (v == null || v.isEmpty) ? 'Ingresa tu contraseña' : null,
+                    validator:
+                        (v) =>
+                            (v == null || v.isEmpty)
+                                ? 'Ingresa tu contraseña'
+                                : null,
                   ),
                   const SizedBox(height: 8),
 
@@ -380,17 +385,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Botón de registro
                   OutlinedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, RegisterScreen.route);
+                      Navigator.pushNamed(
+                        context,
+                        RegisterScreen.route,
+                        arguments: _roleIndex, // Pasar el rol seleccionado
+                      );
                     },
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      side: BorderSide(
-                        color: theme.primaryColor,
-                        width: 1.5,
-                      ),
+                      side: BorderSide(color: theme.primaryColor, width: 1.5),
                     ),
                     child: const Text(
                       '¿No tienes cuenta? Regístrate',
@@ -415,8 +421,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.info_outline, 
-                              size: 20, 
+                            Icon(
+                              Icons.info_outline,
+                              size: 20,
                               color: Colors.blue[700],
                             ),
                             const SizedBox(width: 8),
@@ -473,9 +480,10 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected 
-              ? theme.primaryColor.withOpacity(0.1) 
-              : Colors.transparent,
+          color:
+              isSelected
+                  ? theme.primaryColor.withOpacity(0.1)
+                  : Colors.transparent,
           borderRadius: BorderRadius.vertical(
             top: isFirst ? const Radius.circular(12) : Radius.zero,
             bottom: isLast ? const Radius.circular(12) : Radius.zero,
@@ -486,9 +494,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: isSelected 
-                    ? theme.primaryColor 
-                    : Colors.grey[300],
+                color: isSelected ? theme.primaryColor : Colors.grey[300],
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -507,34 +513,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: isSelected 
-                          ? theme.primaryColor 
-                          : Colors.grey[800],
+                      color: isSelected ? theme.primaryColor : Colors.grey[800],
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     description,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
               ),
             ),
             if (isSelected)
-              Icon(
-                Icons.check_circle,
-                color: theme.primaryColor,
-                size: 24,
-              )
+              Icon(Icons.check_circle, color: theme.primaryColor, size: 24)
             else
-              Icon(
-                Icons.circle_outlined,
-                color: Colors.grey[400],
-                size: 24,
-              ),
+              Icon(Icons.circle_outlined, color: Colors.grey[400], size: 24),
           ],
         ),
       ),

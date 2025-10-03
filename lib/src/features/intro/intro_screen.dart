@@ -33,6 +33,7 @@ class _IntroScreenState extends State<IntroScreen> {
     final hasCondition = _conditions.values.any((v) => v);
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false, // Quitar botón de regreso automático
         title: const Text('Bienvenido a Serenity'),
         elevation: 0,
       ),
@@ -63,14 +64,17 @@ class _IntroScreenState extends State<IntroScreen> {
                     children: [
                       const Row(
                         children: [
-                          Icon(Icons.health_and_safety, 
-                              color: Colors.blue, size: 24),
+                          Icon(
+                            Icons.health_and_safety,
+                            color: Colors.blue,
+                            size: 24,
+                          ),
                           SizedBox(width: 8),
                           Text(
                             'Paso 1 – Salud inicial',
                             style: TextStyle(
-                              fontSize: 20, 
-                              fontWeight: FontWeight.bold
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
@@ -81,12 +85,16 @@ class _IntroScreenState extends State<IntroScreen> {
                         style: TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 12),
-                      ..._conditions.keys.map((k) => CheckboxListTile(
-                        title: Text(k),
-                        value: _conditions[k]!,
-                        onChanged: (v) => setState(() => _conditions[k] = v ?? false),
-                        activeColor: Theme.of(context).primaryColor,
-                      )),
+                      ..._conditions.keys.map(
+                        (k) => CheckboxListTile(
+                          title: Text(k),
+                          value: _conditions[k]!,
+                          onChanged:
+                              (v) =>
+                                  setState(() => _conditions[k] = v ?? false),
+                          activeColor: Theme.of(context).primaryColor,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -107,7 +115,7 @@ class _IntroScreenState extends State<IntroScreen> {
                           '¿Tu médico te ha dado instrucciones específicas?',
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w500
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -116,8 +124,8 @@ class _IntroScreenState extends State<IntroScreen> {
                             DropdownMenuItem(value: 'Sí', child: Text('Sí')),
                             DropdownMenuItem(value: 'No', child: Text('No')),
                             DropdownMenuItem(
-                              value: 'No estoy seguro', 
-                              child: Text('No estoy seguro')
+                              value: 'No estoy seguro',
+                              child: Text('No estoy seguro'),
                             ),
                           ],
                           onChanged: (v) => setState(() => _medicalAdvice = v),
@@ -147,14 +155,17 @@ class _IntroScreenState extends State<IntroScreen> {
                     children: [
                       const Row(
                         children: [
-                          Icon(Icons.track_changes, 
-                              color: Colors.green, size: 24),
+                          Icon(
+                            Icons.track_changes,
+                            color: Colors.green,
+                            size: 24,
+                          ),
                           SizedBox(width: 8),
                           Text(
                             'Paso 2 – Objetivo inicial',
                             style: TextStyle(
-                              fontSize: 20, 
-                              fontWeight: FontWeight.bold
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],

@@ -7,14 +7,19 @@ class TrainerProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Perfil del Entrenador')),
+      appBar: AppBar(
+        automaticallyImplyLeading: false, // Quitar botón de regreso automático
+        title: const Text('Perfil del Entrenador'),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: const [
           ListTile(
             leading: CircleAvatar(child: Icon(Icons.fitness_center)),
             title: Text('Nombre: Luis Gómez'),
-            subtitle: Text('Especialidad: Funcional • Experiencia: 7 años • Certificaciones: CF-L1'),
+            subtitle: Text(
+              'Especialidad: Funcional • Experiencia: 7 años • Certificaciones: CF-L1',
+            ),
           ),
           Card(
             child: Padding(
@@ -31,7 +36,9 @@ class TrainerProfileScreen extends StatelessWidget {
           Divider(),
           ListTile(title: Text('Herramientas extra (laboral):')),
           ListTile(title: Text('• Pausas activas')),
-          ListTile(title: Text('• Retos antiestrés (ej. 5,000 pasos en jornada)')),
+          ListTile(
+            title: Text('• Retos antiestrés (ej. 5,000 pasos en jornada)'),
+          ),
           ListTile(title: Text('• Estadísticas de actividad física')),
         ],
       ),

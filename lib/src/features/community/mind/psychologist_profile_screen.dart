@@ -10,6 +10,8 @@ class PsychologistProfileScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            automaticallyImplyLeading:
+                false, // Quitar botón de regreso automático
             expandedHeight: 300,
             pinned: true,
             actions: [
@@ -69,12 +71,12 @@ class PsychologistProfileScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       _buildInfoRow(Icons.school, 'PhD. en Psicología Clínica'),
                       _buildInfoRow(
-                        Icons.work_outline, 
-                        '12 años de experiencia'
+                        Icons.work_outline,
+                        '12 años de experiencia',
                       ),
                       _buildInfoRow(
-                        Icons.location_on, 
-                        'Lima, Perú - Consultas presenciales y online'
+                        Icons.location_on,
+                        'Lima, Perú - Consultas presenciales y online',
                       ),
                     ],
                   ),
@@ -83,39 +85,37 @@ class PsychologistProfileScreen extends StatelessWidget {
                 _buildSection(
                   'Especialidades',
                   [
-                    'Terapia Cognitivo-Conductual',
-                    'Manejo del Estrés y Ansiedad',
-                    'Depresión',
-                    'Terapia de Pareja',
-                  ].map((esp) => ListTile(
-                    leading: const Icon(Icons.check_circle),
-                    title: Text(esp),
-                  )).toList(),
+                        'Terapia Cognitivo-Conductual',
+                        'Manejo del Estrés y Ansiedad',
+                        'Depresión',
+                        'Terapia de Pareja',
+                      ]
+                      .map(
+                        (esp) => ListTile(
+                          leading: const Icon(Icons.check_circle),
+                          title: Text(esp),
+                        ),
+                      )
+                      .toList(),
                 ),
 
-                _buildSection(
-                  'Horarios de Atención',
-                  [
-                    _buildTimeSlot('Lunes a Viernes', '9am - 6pm'),
-                    _buildTimeSlot('Sábados', '9am - 1pm'),
-                  ],
-                ),
+                _buildSection('Horarios de Atención', [
+                  _buildTimeSlot('Lunes a Viernes', '9am - 6pm'),
+                  _buildTimeSlot('Sábados', '9am - 1pm'),
+                ]),
 
-                _buildSection(
-                  'Testimonios',
-                  [
-                    _buildReview(
-                      'Carlos R.', 
-                      'Excelente profesional, me ayudó mucho',
-                      5
-                    ),
-                    _buildReview(
-                      'Anónimo', 
-                      'Gran experiencia en terapia online',
-                      5
-                    ),
-                  ],
-                ),
+                _buildSection('Testimonios', [
+                  _buildReview(
+                    'Carlos R.',
+                    'Excelente profesional, me ayudó mucho',
+                    5,
+                  ),
+                  _buildReview(
+                    'Anónimo',
+                    'Gran experiencia en terapia online',
+                    5,
+                  ),
+                ]),
               ],
             ),
           ),
@@ -141,10 +141,7 @@ class PsychologistProfileScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Text(
             title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
         ...children,

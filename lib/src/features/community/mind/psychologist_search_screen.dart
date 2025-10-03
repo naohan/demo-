@@ -6,7 +6,8 @@ class PsychologistSearchScreen extends StatefulWidget {
   const PsychologistSearchScreen({super.key});
 
   @override
-  State<PsychologistSearchScreen> createState() => _PsychologistSearchScreenState();
+  State<PsychologistSearchScreen> createState() =>
+      _PsychologistSearchScreenState();
 }
 
 class _PsychologistSearchScreenState extends State<PsychologistSearchScreen> {
@@ -26,6 +27,7 @@ class _PsychologistSearchScreenState extends State<PsychologistSearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false, // Quitar botón de regreso automático
         title: const Text('Buscar Psicólogo'),
       ),
       body: Column(
@@ -57,11 +59,17 @@ class _PsychologistSearchScreenState extends State<PsychologistSearchScreen> {
                       labelText: 'Ubicación',
                       border: OutlineInputBorder(),
                     ),
-                    items: _locations.map((loc) => DropdownMenuItem(
-                      value: loc,
-                      child: Text(loc),
-                    )).toList(),
-                    onChanged: (value) => setState(() => _selectedLocation = value!),
+                    items:
+                        _locations
+                            .map(
+                              (loc) => DropdownMenuItem(
+                                value: loc,
+                                child: Text(loc),
+                              ),
+                            )
+                            .toList(),
+                    onChanged:
+                        (value) => setState(() => _selectedLocation = value!),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -72,11 +80,17 @@ class _PsychologistSearchScreenState extends State<PsychologistSearchScreen> {
                       labelText: 'Especialidad',
                       border: OutlineInputBorder(),
                     ),
-                    items: _specialties.map((spec) => DropdownMenuItem(
-                      value: spec,
-                      child: Text(spec),
-                    )).toList(),
-                    onChanged: (value) => setState(() => _selectedSpecialty = value!),
+                    items:
+                        _specialties
+                            .map(
+                              (spec) => DropdownMenuItem(
+                                value: spec,
+                                child: Text(spec),
+                              ),
+                            )
+                            .toList(),
+                    onChanged:
+                        (value) => setState(() => _selectedSpecialty = value!),
                   ),
                 ),
               ],
@@ -88,32 +102,42 @@ class _PsychologistSearchScreenState extends State<PsychologistSearchScreen> {
             child: ListView.builder(
               padding: const EdgeInsets.all(8),
               itemCount: 10,
-              itemBuilder: (context, index) => Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      'https://randomuser.me/api/portraits/${index % 2 == 0 ? "women" : "men"}/${index + 1}.jpg',
+              itemBuilder:
+                  (context, index) => Card(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          'https://randomuser.me/api/portraits/${index % 2 == 0 ? "women" : "men"}/${index + 1}.jpg',
+                        ),
+                      ),
+                      title: Text(
+                        'Dr. ${index % 2 == 0 ? "María" : "Juan"} ${index + 1}',
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${_locations[index % _locations.length]}'),
+                          Text('${_specialties[index % _specialties.length]}'),
+                        ],
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('4.${5 + index % 5}'),
+                          const Icon(Icons.star, size: 16, color: Colors.amber),
+                        ],
+                      ),
+                      onTap:
+                          () => Navigator.pushNamed(
+                            context,
+                            PsychologistProfileScreen.route,
+                          ),
                     ),
                   ),
-                  title: Text('Dr. ${index % 2 == 0 ? "María" : "Juan"} ${index + 1}'),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('${_locations[index % _locations.length]}'),
-                      Text('${_specialties[index % _specialties.length]}'),
-                    ],
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('4.${5 + index % 5}'),
-                      const Icon(Icons.star, size: 16, color: Colors.amber),
-                    ],
-                  ),
-                  onTap: () => Navigator.pushNamed(context, PsychologistProfileScreen.route),
-                ),
-              ),
             ),
           ),
         ],
