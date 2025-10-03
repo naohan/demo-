@@ -72,18 +72,53 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _playTrack(int index) async {
     setState(() => _currentTrack = index);
-    final assetPath = 'assets/audio/track${index + 1}.mp3';
+    
+    // URLs de audio que funcionan correctamente
+    final workingUrls = [
+      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
+      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
+      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
+    ];
+    
+    // URLs alternativas que funcionan
+    final alternativeUrls = [
+      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
+      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
+      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
+    ];
+    
     try {
       await _player.stop();
-      await _player.play(AssetSource(assetPath));
-    } catch (_) {
-      final demoUrls = [
-        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-      ];
-      await _player.play(UrlSource(demoUrls[index]));
+      
+      // Mostrar mensaje de reproducción
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Reproduciendo pista ${index + 1}...'),
+          backgroundColor: const Color(0xFF4A90A4),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      
+      // Reproducir audio directamente desde URL
+      await _player.play(UrlSource(workingUrls[index]));
+      
+    } catch (e) {
+      print('Error playing audio: $e');
+      try {
+        // Intentar con URL alternativa
+        await _player.play(UrlSource(alternativeUrls[index]));
+      } catch (e2) {
+        print('Error with alternative audio: $e2');
+        // Mostrar mensaje de error más específico
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Audio temporalmente no disponible. Los archivos MP3 necesitan ser convertidos a un formato compatible.'),
+            backgroundColor: Colors.orange,
+            duration: Duration(seconds: 4),
+          ),
+        );
+        setState(() => _currentTrack = null);
+      }
     }
   }
 
@@ -91,8 +126,22 @@ class _HomeScreenState extends State<HomeScreen> {
     final state = await _player.state;
     if (state == PlayerState.playing) {
       await _player.pause();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Audio pausado'),
+          backgroundColor: Colors.orange,
+          duration: Duration(seconds: 1),
+        ),
+      );
     } else if (state == PlayerState.paused) {
       await _player.resume();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Audio reanudado'),
+          backgroundColor: Color(0xFF4A90A4),
+          duration: Duration(seconds: 1),
+        ),
+      );
     }
     setState(() {});
   }
@@ -128,51 +177,105 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: const Color(0xFFF8F9FA),
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () => Scaffold.of(context).openDrawer(),
+          builder: (context) => Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.9),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.menu, color: Color(0xFF4A90A4)),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
           ),
         ),
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/logo/logo_S.png',
-              height: 32,
-              errorBuilder: (context, error, stackTrace) => 
-                const Icon(Icons.pets, size: 32),
-            ),
-            const SizedBox(width: 8),
-            const Text('Serenity'),
-          ],
+        title: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.9),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/logo/logo_S.png',
+                height: 28,
+                errorBuilder: (context, error, stackTrace) => 
+                  const Icon(Icons.pets, size: 28, color: Color(0xFF4A90A4)),
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Serenity',
+                style: TextStyle(
+                  color: Color(0xFF4A90A4),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
         ),
+        centerTitle: true,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12.0),
-            child: Text(
+          Container(
+            margin: const EdgeInsets.all(8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: const Color(0xFF4A90A4),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Text(
               'Home',
-              style: const TextStyle(fontWeight: FontWeight.w500),
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 12,
+              ),
             ),
           ),
         ],
       ),
       drawer: _buildDrawer(),
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: Center(
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: 900),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF4A90A4),
+              Color(0xFF7BB3C7),
+              Color(0xFFF8F9FA),
+            ],
+            stops: [0.0, 0.3, 1.0],
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFFDF5),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: ListView(
+            child: Column(
               children: [
+                const SizedBox(height: 16),
                 _buildHeroSection(),
                 const SizedBox(height: 20),
                 _buildWelcomeSection(),
@@ -182,6 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _buildMusicSection(),
                 const SizedBox(height: 20),
                 _buildDailyAgenda(),
+                const SizedBox(height: 16),
               ],
             ),
           ),
@@ -421,25 +525,72 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildHeroSection() {
-    return Center(
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              const Color(0xFF4A90A4).withOpacity(0.1),
-              const Color(0xFF7BB3C7).withOpacity(0.05),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.95),
+            Colors.white.withOpacity(0.85),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          Icons.self_improvement,
-          size: 64,
-          color: Color(0xFF4A90A4),
-        ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF4A90A4), Color(0xFF7BB3C7)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF4A90A4).withOpacity(0.3),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: const Icon(
+              Icons.self_improvement,
+              size: 48,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Tu Bienestar es Nuestra Prioridad',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2C3E50),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Descubre tu espacio de calma y tranquilidad',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[600],
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
@@ -448,75 +599,133 @@ class _HomeScreenState extends State<HomeScreen> {
     final now = DateTime.now();
     final hour = now.hour;
     String greeting = 'Buenos días';
+    String emoji = '🌅';
     
     if (hour >= 12 && hour < 18) {
       greeting = 'Buenas tardes';
+      emoji = '☀️';
     } else if (hour >= 18) {
       greeting = 'Buenas noches';
+      emoji = '🌙';
     }
 
     return Container(
-      padding: const EdgeInsets.all(24),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF4A90A4).withOpacity(0.1),
-            const Color(0xFF7BB3C7).withOpacity(0.1),
+            Colors.white.withOpacity(0.95),
+            Colors.white.withOpacity(0.85),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: const Color(0xFF4A90A4).withOpacity(0.2),
-          width: 1,
-        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            greeting,
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF2C3E50),
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'Tu espacio de calma y bienestar',
-            style: TextStyle(
-              fontSize: 16,
-              color: Color(0xFF4A90A4),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF4A90A4).withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
+          Row(
+            children: [
+              Text(
+                emoji,
+                style: const TextStyle(fontSize: 32),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      greeting,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF2C3E50),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Tu espacio de calma y bienestar',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF4A90A4),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
+              if (_currentTrack != null)
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF27AE60), Color(0xFF2ECC71)],
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF27AE60).withOpacity(0.3),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.music_note,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  const Color(0xFF4A90A4).withOpacity(0.1),
+                  const Color(0xFF7BB3C7).withOpacity(0.05),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: const Color(0xFF4A90A4).withOpacity(0.2),
+                width: 1,
+              ),
             ),
             child: Row(
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF4A90A4).withOpacity(0.1),
-                    shape: BoxShape.circle,
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF4A90A4), Color(0xFF7BB3C7)],
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF4A90A4).withOpacity(0.3),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
                   child: const Icon(
-                    Icons.today,
-                    color: Color(0xFF4A90A4),
+                    Icons.calendar_today,
+                    color: Colors.white,
                     size: 24,
                   ),
                 ),
@@ -528,11 +737,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Text(
                         'Día de bienestar',
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                           color: Color(0xFF2C3E50),
                         ),
                       ),
+                      const SizedBox(height: 4),
                       Text(
                         '${_agenda.length} actividades programadas',
                         style: TextStyle(
@@ -543,19 +753,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                if (_currentTrack != null)
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF27AE60),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.music_note,
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF4A90A4),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    '${_agenda.length}',
+                    style: const TextStyle(
                       color: Colors.white,
-                      size: 16,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
                   ),
+                ),
               ],
             ),
           ),
@@ -566,15 +778,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildQuickActions() {
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.95),
+            Colors.white.withOpacity(0.85),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -584,261 +804,183 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF4A90A4).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF4A90A4), Color(0xFF7BB3C7)],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF4A90A4).withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: const Icon(
                   Icons.flash_on,
-                  color: Color(0xFF4A90A4),
+                  color: Colors.white,
                   size: 24,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 16),
               const Text(
-                'Acciones Rápidas',
+                'Comunidad',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF2C3E50),
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 20),
+          _buildActionCard(
+            Icons.psychology,
+            'Mente Plena',
+            'Meditación y mindfulness',
+            () => Navigator.pushNamed(context, CommunityMindScreen.route),
+            const Color(0xFF27AE60),
+            'assets/home/mente_plena.png',
+          ),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: _buildActionCard(
-                  Icons.psychology,
-                  'Mente Plena',
-                  'Meditación y mindfulness',
-                  () => Navigator.pushNamed(context, CommunityMindScreen.route),
-                  const Color(0xFF27AE60),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildActionCard(
-                  Icons.fitness_center,
-                  'Zona Vital',
-                  'Ejercicio y actividad física',
-                  () => Navigator.pushNamed(context, CommunityVitalScreen.route),
-                  const Color(0xFF3498DB),
-                ),
-              ),
-            ],
+          _buildActionCard(
+            Icons.fitness_center,
+            'Zona Vital',
+            'Ejercicio y actividad física',
+            () => Navigator.pushNamed(context, CommunityVitalScreen.route),
+            const Color(0xFF3498DB),
+            'assets/home/zona_vital.png',
           ),
         ],
       ),
     );
   }
 
-  Widget _buildActionCard(IconData icon, String title, String subtitle, VoidCallback onTap, Color color) {
+  Widget _buildActionCard(IconData icon, String title, String subtitle, VoidCallback onTap, Color color, String? imagePath) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(20),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              color.withOpacity(0.1),
-              color.withOpacity(0.05),
+              color.withOpacity(0.15),
+              color.withOpacity(0.08),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: color.withOpacity(0.2),
-            width: 1,
+            color: color.withOpacity(0.3),
+            width: 1.5,
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, size: 32, color: color),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.2),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildMusicSection() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE91E63).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(
-                  Icons.music_note,
-                  color: Color(0xFFE91E63),
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 12),
-              const Text(
-                'Música Relajante',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF2C3E50),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          GridView.count(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 2.5,
-            children: List.generate(4, (i) {
-              final isCurrent = _currentTrack == i;
-              return _buildMusicTrack(i + 1, isCurrent);
-            }),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: _pauseOrResume,
-                  icon: const Icon(Icons.pause_circle_outline),
-                  label: const Text('Pausar/Continuar'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4A90A4),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    await _player.stop();
-                    setState(() => _currentTrack = null);
-                  },
-                  icon: const Icon(Icons.stop_circle_outlined),
-                  label: const Text('Detener'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[600],
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMusicTrack(int trackNumber, bool isCurrent) {
-    return InkWell(
-      onTap: () => _playTrack(trackNumber - 1),
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: isCurrent 
-              ? [const Color(0xFFE91E63).withOpacity(0.1), const Color(0xFFE91E63).withOpacity(0.05)]
-              : [Colors.grey[50]!, Colors.grey[100]!],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isCurrent 
-              ? const Color(0xFFE91E63).withOpacity(0.3)
-              : Colors.grey[200]!,
-            width: 1,
-          ),
-        ),
         child: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: isCurrent 
-                  ? const Color(0xFFE91E63)
-                  : Colors.grey[400],
-                shape: BoxShape.circle,
+            // Imagen en el lado izquierdo
+            if (imagePath != null)
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  image: DecorationImage(
+                    image: AssetImage(imagePath),
+                    fit: BoxFit.cover,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      blurRadius: 12,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+                ),
+              )
+            else
+              Container(
+                width: 80,
+                height: 80,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [color, color.withOpacity(0.8)],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: color.withOpacity(0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+                ),
+                child: Icon(icon, size: 32, color: Colors.white),
               ),
-              child: Icon(
-                isCurrent ? Icons.play_arrow : Icons.music_note,
-                color: Colors.white,
-                size: 16,
-              ),
-            ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 16),
+            // Contenido de texto en el lado derecho
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Pista $trackNumber',
+                    title,
                     style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: isCurrent ? const Color(0xFFE91E63) : Colors.grey[800],
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: color,
                     ),
                   ),
+                  const SizedBox(height: 6),
                   Text(
-                    'Relajación',
+                    subtitle,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 13,
                       color: Colors.grey[600],
+                      height: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: color.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: color.withOpacity(0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 10,
+                          color: color,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Explorar',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: color,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -850,17 +992,25 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildDailyAgenda() {
+  Widget _buildMusicSection() {
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.95),
+            Colors.white.withOpacity(0.85),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -870,118 +1020,603 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF9C27B0).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFE91E63), Color(0xFFF06292)],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFE91E63).withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: const Icon(
-                  Icons.calendar_today,
-                  color: Color(0xFF9C27B0),
+                  Icons.music_note,
+                  color: Colors.white,
                   size: 24,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 16),
               const Text(
-                'Agenda Diaria',
+                'Música Relajante',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF2C3E50),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
+          Column(
+            children: [
+              _buildMusicTrack(1, _currentTrack == 0, 'Conciliar Sueño', '🌙'),
+              const SizedBox(height: 12),
+              _buildMusicTrack(2, _currentTrack == 1, 'Concentración', '🎯'),
+              const SizedBox(height: 12),
+              _buildMusicTrack(3, _currentTrack == 2, 'Relajamiento', '🧘'),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF4A90A4), Color(0xFF7BB3C7)],
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF4A90A4).withOpacity(0.3),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton.icon(
+                    onPressed: _pauseOrResume,
+                    icon: StreamBuilder<PlayerState>(
+                      stream: _player.onPlayerStateChanged,
+                      builder: (context, snapshot) {
+                        final state = snapshot.data ?? PlayerState.stopped;
+                        return Icon(
+                          state == PlayerState.playing 
+                            ? Icons.pause_circle_filled 
+                            : Icons.play_circle_filled,
+                          size: 20,
+                        );
+                      },
+                    ),
+                    label: StreamBuilder<PlayerState>(
+                      stream: _player.onPlayerStateChanged,
+                      builder: (context, snapshot) {
+                        final state = snapshot.data ?? PlayerState.stopped;
+                        return Text(state == PlayerState.playing ? 'Pausar' : 'Reproducir');
+                      },
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.grey[600]!, Colors.grey[700]!],
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      await _player.stop();
+                      setState(() => _currentTrack = null);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Audio detenido'),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.stop_circle_outlined),
+                    label: const Text('Detener'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMusicTrack(int trackNumber, bool isCurrent, String audioName, String emoji) {
+    return InkWell(
+      onTap: () => _playTrack(trackNumber - 1),
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: isCurrent 
+              ? [const Color(0xFFE91E63).withOpacity(0.15), const Color(0xFFE91E63).withOpacity(0.08)]
+              : [Colors.white, Colors.grey[50]!],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isCurrent 
+              ? const Color(0xFFE91E63).withOpacity(0.4)
+              : Colors.grey[200]!,
+            width: isCurrent ? 2 : 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: isCurrent 
+                ? const Color(0xFFE91E63).withOpacity(0.2)
+                : Colors.black.withOpacity(0.08),
+              blurRadius: isCurrent ? 20 : 10,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // Contenedor del emoji y botón de play
+            Container(
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(
+                gradient: isCurrent 
+                  ? const LinearGradient(
+                      colors: [Color(0xFFE91E63), Color(0xFFF06292)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                  : LinearGradient(
+                      colors: [Colors.grey[400]!, Colors.grey[500]!],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [
+                  BoxShadow(
+                    color: isCurrent 
+                      ? const Color(0xFFE91E63).withOpacity(0.3)
+                      : Colors.grey.withOpacity(0.2),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Emoji de fondo
+                  Opacity(
+                    opacity: isCurrent ? 0.3 : 0.2,
+                    child: Text(
+                      emoji,
+                      style: const TextStyle(
+                        fontSize: 32,
+                      ),
+                    ),
+                  ),
+                  // Icono de play o pista
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.9),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: isCurrent 
+                      ? const Icon(
+                          Icons.pause,
+                          color: Color(0xFFE91E63),
+                          size: 24,
+                        )
+                      : Image.asset(
+                          'assets/home/pista.png',
+                          width: 24,
+                          height: 24,
+                          color: Colors.grey[600],
+                          errorBuilder: (context, error, stackTrace) => const Icon(
+                            Icons.play_arrow,
+                            color: Colors.grey,
+                            size: 24,
+                          ),
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            // Información de la pista
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Pista $trackNumber',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: isCurrent ? const Color(0xFFE91E63) : Colors.grey[700],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      if (isCurrent)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE91E63),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Text(
+                            'REPRODUCIENDO',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    audioName,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isCurrent ? const Color(0xFFE91E63).withOpacity(0.8) : Colors.grey[600],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Barra de progreso visual
+                  Container(
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                    child: isCurrent 
+                      ? Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFE91E63), Color(0xFFF06292)],
+                            ),
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        )
+                      : null,
+                  ),
+                ],
+              ),
+            ),
+            // Indicador de estado
+            if (isCurrent)
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE91E63),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFE91E63).withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.equalizer,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              )
+            else
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.music_note,
+                  color: Colors.grey[600],
+                  size: 16,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDailyAgenda() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.95),
+            Colors.white.withOpacity(0.85),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF9C27B0), Color(0xFFBA68C8)],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF9C27B0).withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.calendar_today,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              const Text(
+                'Agenda Diaria',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2C3E50),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
           Row(
             children: [
               Expanded(
                 flex: 2,
-                child: TextField(
-                  controller: _agendaController,
-                  decoration: InputDecoration(
-                    hintText: 'Nueva actividad...',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: TextField(
+                    controller: _agendaController,
+                    decoration: InputDecoration(
+                      hintText: 'Nueva actividad...',
+                      hintStyle: TextStyle(color: Colors.grey[500]),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(color: Colors.grey[200]!),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(color: Colors.grey[200]!),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(color: Color(0xFF9C27B0), width: 2),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 12),
               InkWell(
                 onTap: _pickTime,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF9C27B0).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color(0xFF9C27B0).withOpacity(0.1),
+                        const Color(0xFF9C27B0).withOpacity(0.05),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: const Color(0xFF9C27B0).withOpacity(0.3),
+                      width: 1,
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF9C27B0).withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(
                         Icons.schedule,
-                        size: 16,
+                        size: 18,
                         color: Color(0xFF9C27B0),
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 6),
                       Text(
                         _selectedTime.format(context),
                         style: const TextStyle(
                           fontSize: 12,
                           color: Color(0xFF9C27B0),
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
-              ElevatedButton(
-                onPressed: _addAgenda,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF9C27B0),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              const SizedBox(width: 12),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF9C27B0), Color(0xFFBA68C8)],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF9C27B0).withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ElevatedButton(
+                  onPressed: _addAgenda,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: const Text(
+                    'Añadir',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-                child: const Text('Añadir'),
               ),
             ],
           ),
           const SizedBox(height: 16),
           if (_agenda.isEmpty)
             Container(
-              padding: const EdgeInsets.all(32),
+              padding: const EdgeInsets.all(40),
+              margin: const EdgeInsets.only(top: 16),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    const Color(0xFF9C27B0).withOpacity(0.05),
+                    const Color(0xFF9C27B0).withOpacity(0.02),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: const Color(0xFF9C27B0).withOpacity(0.1),
+                  width: 1,
+                ),
+              ),
               child: Column(
                 children: [
-                  Icon(
-                    Icons.event_available,
-                    size: 48,
-                    color: Colors.grey[400],
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF9C27B0), Color(0xFFBA68C8)],
+                      ),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF9C27B0).withOpacity(0.3),
+                          blurRadius: 15,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.event_available,
+                      size: 32,
+                      color: Colors.white,
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  Text(
+                  const SizedBox(height: 20),
+                  const Text(
                     'No hay actividades programadas',
                     style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[600],
-                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      color: Color(0xFF2C3E50),
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Añade tu primera actividad para comenzar',
+                    'Añade tu primera actividad para comenzar tu día de bienestar',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey[500],
+                      color: Colors.grey[600],
+                      height: 1.4,
                     ),
                     textAlign: TextAlign.center,
                   ),

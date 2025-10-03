@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/base_layout.dart';
+import '../../widgets/user_base_layout.dart';
 
 class ActivityStatsScreen extends StatefulWidget {
   static const route = '/activity-stats';
@@ -41,7 +41,7 @@ class _ActivityStatsScreenState extends State<ActivityStatsScreen>
     final maxSteps = weekSteps.reduce((a, b) => a > b ? a : b);
     final days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
-    return BaseLayout(
+    return UserBaseLayout(
       title: 'Mi Actividad',
       hero: AnimatedBuilder(
         animation: _fadeAnimation,
