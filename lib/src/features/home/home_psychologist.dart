@@ -48,20 +48,37 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
     Patient(
       name: 'María',
       lastName: 'González',
-      avatar: 'https://randomuser.me/api/portraits/women/1.jpg',
+      avatar:
+          'https://ui-avatars.com/api/?name=Maria+Gonzalez&background=f8f9fa&color=495057&size=128',
       mood: PatientMood.happy,
     ),
     Patient(
       name: 'Carlos',
       lastName: 'Mendoza',
-      avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
+      avatar:
+          'https://ui-avatars.com/api/?name=Carlos+Mendoza&background=e3f2fd&color=1976d2&size=128',
       mood: PatientMood.neutral,
     ),
     Patient(
       name: 'Ana',
       lastName: 'Rodríguez',
-      avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
+      avatar:
+          'https://ui-avatars.com/api/?name=Ana+Rodriguez&background=fce4ec&color=c2185b&size=128',
       mood: PatientMood.sad,
+    ),
+    Patient(
+      name: 'Luis',
+      lastName: 'Hernández',
+      avatar:
+          'https://ui-avatars.com/api/?name=Luis+Hernandez&background=e8f5e8&color=388e3c&size=128',
+      mood: PatientMood.happy,
+    ),
+    Patient(
+      name: 'Sofia',
+      lastName: 'Martín',
+      avatar:
+          'https://ui-avatars.com/api/?name=Sofia+Martin&background=f3e5f5&color=7b1fa2&size=128',
+      mood: PatientMood.neutral,
     ),
   ];
 
@@ -69,17 +86,26 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
     Session(
       time: '2:00 PM',
       patientName: 'María González',
-      patientAvatar: 'https://randomuser.me/api/portraits/women/1.jpg',
+      patientAvatar:
+          'https://ui-avatars.com/api/?name=Maria+Gonzalez&background=f8f9fa&color=495057&size=128',
     ),
     Session(
       time: '4:30 PM',
       patientName: 'Juan Pérez',
-      patientAvatar: 'https://randomuser.me/api/portraits/men/2.jpg',
+      patientAvatar:
+          'https://ui-avatars.com/api/?name=Juan+Perez&background=e8f5e8&color=2e7d32&size=128',
     ),
     Session(
       time: '6:00 PM',
-      patientName: 'Carla',
-      patientAvatar: 'https://randomuser.me/api/portraits/women/3.jpg',
+      patientName: 'Carla Sánchez',
+      patientAvatar:
+          'https://ui-avatars.com/api/?name=Carla+Sanchez&background=fff3e0&color=f57c00&size=128',
+    ),
+    Session(
+      time: '9:00 AM',
+      patientName: 'Luis Hernández',
+      patientAvatar:
+          'https://ui-avatars.com/api/?name=Luis+Hernandez&background=e8f5e8&color=388e3c&size=128',
     ),
   ];
 
@@ -243,10 +269,29 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
       child: Row(
         children: [
           // Avatar del paciente
-          CircleAvatar(
-            radius: 24,
-            backgroundImage: NetworkImage(patient.avatar),
-            backgroundColor: Colors.grey[200],
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: CircleAvatar(
+              radius: 24,
+              backgroundImage: NetworkImage(patient.avatar),
+              backgroundColor: Colors.grey[200],
+              onBackgroundImageError: (exception, stackTrace) {
+                // En caso de error, se mostrará el backgroundColor
+              },
+              child:
+                  patient.avatar.isEmpty
+                      ? Icon(Icons.person, color: Colors.grey[600], size: 30)
+                      : null,
+            ),
           ),
           const SizedBox(width: 16),
 
@@ -354,10 +399,29 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
       child: Row(
         children: [
           // Avatar del paciente
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage(session.patientAvatar),
-            backgroundColor: Colors.grey[200],
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF6B73FF).withOpacity(0.2),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(session.patientAvatar),
+              backgroundColor: Colors.grey[200],
+              onBackgroundImageError: (exception, stackTrace) {
+                // En caso de error, se mostrará el backgroundColor
+              },
+              child:
+                  session.patientAvatar.isEmpty
+                      ? Icon(Icons.person, color: Colors.grey[600], size: 24)
+                      : null,
+            ),
           ),
           const SizedBox(width: 16),
 
