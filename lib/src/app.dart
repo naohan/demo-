@@ -5,6 +5,8 @@ import 'features/auth/login_screen.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'features/intro/intro_screen.dart';
 import 'features/home/home_screen.dart';
+import 'features/home/home_psychologist.dart';
+import 'features/home/home_trainer.dart';
 import 'features/community/mind/community_mind_screen.dart';
 import 'features/community/vital/community_vital_screen.dart';
 import 'features/community/vital/trainers_screen.dart';
@@ -34,6 +36,8 @@ class CalmmindApp extends StatelessWidget {
         OnboardingScreen.route: (_) => const OnboardingScreen(),
         IntroScreen.route: (_) => const IntroScreen(),
         HomeScreen.route: (_) => const HomeScreen(),
+        HomePsychologistScreen.route: (_) => const HomePsychologistScreen(),
+        HomeTrainerScreen.route: (_) => const HomeTrainerScreen(),
         CommunityMindScreen.route: (_) => const CommunityMindScreen(),
         CommunityVitalScreen.route: (_) => const CommunityVitalScreen(),
         TrainersScreen.route: (_) => const TrainersScreen(),
@@ -41,8 +45,10 @@ class CalmmindApp extends StatelessWidget {
         MentalWellbeingScreen.route: (_) => const MentalWellbeingScreen(),
         GoalsConfigScreen.route: (_) => const GoalsConfigScreen(),
         ActivityStatsScreen.route: (_) => const ActivityStatsScreen(),
-        TrainerRecommendationsScreen.route: (_) => const TrainerRecommendationsScreen(),
-        PsychologistProfileScreen.route: (_) => const PsychologistProfileScreen(),
+        TrainerRecommendationsScreen.route:
+            (_) => const TrainerRecommendationsScreen(),
+        PsychologistProfileScreen.route:
+            (_) => const PsychologistProfileScreen(),
         TrainerProfileScreen.route: (_) => const TrainerProfileScreen(),
         ProfileScreen.route: (_) => const ProfileScreen(),
       },

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../widgets/base_layout.dart';
 import 'trainers_screen.dart';
-import '../../../core/user_session.dart';
 
 class CommunityVitalScreen extends StatefulWidget {
   static const route = '/community-vital';
@@ -113,61 +112,37 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final userSession = UserSession();
-
     return BaseLayout(
-      title: 'Home - ${userSession.userName ?? "Entrenador"}',
-      hero: Column(
-        children: [
-          // Saludo personalizado
-          Text(
-            '¡Hola, Coach ${userSession.userName?.split(' ').first ?? "Entrenador"}!',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: const Color(0xFF3498DB),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Impulsa el rendimiento de tus clientes',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.grey[600],
-            ),
-          ),
-          const SizedBox(height: 16),
-          // Icono animado
-          AnimatedBuilder(
-            animation: _fadeAnimation,
-            builder: (context, child) {
-              return Transform.scale(
-                scale: 0.9 + (_fadeAnimation.value * 0.1),
-                child: Opacity(
-                  opacity: _fadeAnimation.value,
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          const Color(0xFF3498DB).withOpacity(0.1),
-                          const Color(0xFF2ECC71).withOpacity(0.05),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.fitness_center,
-                      size: 48,
-                      color: Color(0xFF3498DB),
-                    ),
+      title: 'Comunidad Zona Vital',
+      hero: AnimatedBuilder(
+        animation: _fadeAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: 0.9 + (_fadeAnimation.value * 0.1),
+            child: Opacity(
+              opacity: _fadeAnimation.value,
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFF3498DB).withOpacity(0.1),
+                      const Color(0xFF2ECC71).withOpacity(0.05),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
+                  shape: BoxShape.circle,
                 ),
-              );
-            },
-          ),
-        ],
+                child: const Icon(
+                  Icons.fitness_center,
+                  size: 64,
+                  color: Color(0xFF3498DB),
+                ),
+              ),
+            ),
+          );
+        },
       ),
       child: FadeTransition(
         opacity: _fadeAnimation,
@@ -175,10 +150,6 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
           position: _slideAnimation,
           child: Column(
             children: [
-              // Sección de accesos rápidos para entrenadores
-              _buildQuickAccessSection(),
-              const SizedBox(height: 20),
-
               // Botón de encontrar entrenador
               _buildFindTrainerSection(),
               const SizedBox(height: 20),
@@ -652,142 +623,6 @@ class _CommunityVitalScreenState extends State<CommunityVitalScreen>
               ),
             ],
           ),
-    );
-  }
-
-  Widget _buildQuickAccessSection() {
-    final theme = Theme.of(context);
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.primaryColor.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.primaryColor.withOpacity(0.2)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Panel de Control',
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: const Color(0xFF3498DB),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: _TrainerQuickAccessCard(
-                  icon: Icons.groups,
-                  title: 'Mis Clientes',
-                  subtitle: 'Gestionar entrenamientos',
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Próximamente: Gestión de clientes'),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _TrainerQuickAccessCard(
-                  icon: Icons.fitness_center,
-                  title: 'Rutinas',
-                  subtitle: 'Crear y editar',
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Próximamente: Editor de rutinas'),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _TrainerQuickAccessCard(
-                  icon: Icons.trending_up,
-                  title: 'Progreso',
-                  subtitle: 'Ver estadísticas',
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Próximamente: Análisis de progreso'),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Widget para los accesos rápidos del entrenador
-class _TrainerQuickAccessCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  const _TrainerQuickAccessCard({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFF3498DB).withOpacity(0.3)),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF3498DB).withOpacity(0.1),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Icon(icon, size: 32, color: const Color(0xFF3498DB)),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF3498DB),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: Colors.grey[600],
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

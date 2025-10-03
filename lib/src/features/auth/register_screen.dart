@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../onboarding/onboarding_screen.dart';
-import '../community/mind/community_mind_screen.dart';
-import '../community/vital/community_vital_screen.dart';
 import 'login_screen.dart';
 import '../../core/user_session.dart';
 
@@ -265,11 +263,11 @@ class _RegisterScreenState extends State<RegisterScreen>
         // Usuario normal - va al onboarding
         Navigator.pushReplacementNamed(context, OnboardingScreen.route);
       } else if (_roleIndex == 1) {
-        // Psicólogo - va directo a Community Mind
-        Navigator.pushReplacementNamed(context, CommunityMindScreen.route);
+        // Psicólogo - va directo a Home Psychologist
+        Navigator.pushReplacementNamed(context, '/home-psychologist');
       } else {
-        // Entrenador - va directo a Community Vital
-        Navigator.pushReplacementNamed(context, CommunityVitalScreen.route);
+        // Entrenador - va directo a Home Trainer
+        Navigator.pushReplacementNamed(context, '/home-trainer');
       }
     });
   }
