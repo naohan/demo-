@@ -483,39 +483,33 @@ class _PhysicalWellbeingScreenState extends State<PhysicalWellbeingScreen>
           ),
         ],
       ),
-      child: Row(
+      child: Column(
         children: [
           // Calorías
-          Expanded(
-            child: _buildMetricCard(
-              icon: Icons.local_fire_department,
-              iconColor: Colors.orange,
-              label: 'Calorías',
-              value: '100',
-              goal: '/400 kcal',
-            ),
+          _buildMetricCard(
+            icon: Icons.local_fire_department,
+            iconColor: Colors.orange,
+            label: 'Calorías',
+            value: '100',
+            goal: '/400 kcal',
           ),
-          const SizedBox(width: 16),
+          const SizedBox(height: 12),
           // Pasos
-          Expanded(
-            child: _buildMetricCard(
-              icon: Icons.directions_walk,
-              iconColor: Colors.yellow,
-              label: 'Pasos',
-              value: '1000',
-              goal: '/6000 pasos',
-            ),
+          _buildMetricCard(
+            icon: Icons.directions_walk,
+            iconColor: Colors.yellow,
+            label: 'Pasos',
+            value: '1000',
+            goal: '/6000 pasos',
           ),
-          const SizedBox(width: 16),
+          const SizedBox(height: 12),
           // Movimiento
-          Expanded(
-            child: _buildMetricCard(
-              icon: Icons.access_time,
-              iconColor: Colors.blue,
-              label: 'Movimiento',
-              value: '4h',
-              goal: '/30 min',
-            ),
+          _buildMetricCard(
+            icon: Icons.access_time,
+            iconColor: Colors.blue,
+            label: 'Movimiento',
+            value: '4h',
+            goal: '/30 min',
           ),
         ],
       ),
@@ -1123,7 +1117,7 @@ class _PhysicalWellbeingScreenState extends State<PhysicalWellbeingScreen>
               crossAxisCount: 2,
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
-              childAspectRatio: 0.85,
+              childAspectRatio: 1.1,
             ),
             itemCount: sports.length,
             itemBuilder: (context, index) {
@@ -1173,19 +1167,16 @@ class _PhysicalWellbeingScreenState extends State<PhysicalWellbeingScreen>
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
           // Imagen del deporte
-          Expanded(
-            flex: 2,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                image: DecorationImage(
-                  image: AssetImage(imagePath),
-                  fit: BoxFit.contain,
-                ),
+          Container(
+            height: 60,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              image: DecorationImage(
+                image: AssetImage(imagePath),
+                fit: BoxFit.contain,
               ),
             ),
           ),
@@ -1203,9 +1194,7 @@ class _PhysicalWellbeingScreenState extends State<PhysicalWellbeingScreen>
           ),
           const SizedBox(height: 8),
           // Timer y controles
-          Expanded(
-            flex: 1,
-            child: StreamBuilder<Duration>(
+          StreamBuilder<Duration>(
               stream: timerController.durationStream,
               builder: (context, snapshot) {
                 final duration = snapshot.data ?? Duration.zero;
@@ -1239,8 +1228,8 @@ class _PhysicalWellbeingScreenState extends State<PhysicalWellbeingScreen>
                             }
                           },
                           child: Container(
-                            width: 32,
-                            height: 32,
+                            width: 28,
+                            height: 28,
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [color, color.withOpacity(0.8)],
@@ -1249,7 +1238,7 @@ class _PhysicalWellbeingScreenState extends State<PhysicalWellbeingScreen>
                               boxShadow: [
                                 BoxShadow(
                                   color: color.withOpacity(0.3),
-                                  blurRadius: 6,
+                                  blurRadius: 4,
                                   offset: const Offset(0, 2),
                                 ),
                               ],
@@ -1257,19 +1246,19 @@ class _PhysicalWellbeingScreenState extends State<PhysicalWellbeingScreen>
                             child: Icon(
                               isRunning ? Icons.pause : Icons.play_arrow,
                               color: Colors.white,
-                              size: 18,
+                              size: 14,
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 6),
                         // Botón de reset
                         GestureDetector(
                           onTap: () {
                             timerController.reset();
                           },
                           child: Container(
-                            width: 28,
-                            height: 28,
+                            width: 24,
+                            height: 24,
                             decoration: BoxDecoration(
                               color: Colors.grey.withOpacity(0.3),
                               shape: BoxShape.circle,
@@ -1281,16 +1270,16 @@ class _PhysicalWellbeingScreenState extends State<PhysicalWellbeingScreen>
                             child: Icon(
                               Icons.stop,
                               color: color,
-                              size: 14,
+                              size: 12,
                             ),
                           ),
                         ),
                         // Icono de completado
                         if (totalDuration.inMinutes >= 5) ...[
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 6),
                           Container(
-                            width: 28,
-                            height: 28,
+                            width: 24,
+                            height: 24,
                             decoration: BoxDecoration(
                               color: Colors.green.withOpacity(0.2),
                               shape: BoxShape.circle,
@@ -1302,7 +1291,7 @@ class _PhysicalWellbeingScreenState extends State<PhysicalWellbeingScreen>
                             child: const Icon(
                               Icons.check_circle,
                               color: Colors.green,
-                              size: 16,
+                              size: 14,
                             ),
                           ),
                         ],
@@ -1312,7 +1301,6 @@ class _PhysicalWellbeingScreenState extends State<PhysicalWellbeingScreen>
                 );
               },
             ),
-          ),
         ],
       ),
     );

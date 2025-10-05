@@ -19,6 +19,22 @@ class PatientReport {
   });
 }
 
+class Appointment {
+  final String patientName;
+  final String time;
+  final int duration;
+  final String type;
+  final String status;
+
+  Appointment({
+    required this.patientName,
+    required this.time,
+    required this.duration,
+    required this.type,
+    required this.status,
+  });
+}
+
 class HomePsychologistScreen extends StatefulWidget {
   static const route = '/home-psychologist';
   const HomePsychologistScreen({super.key});
@@ -46,23 +62,55 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
           'https://ui-avatars.com/api/?name=Ana+Garcia&background=3b82f6&color=ffffff&size=128',
       diagnosis: 'Ansiedad',
       level: AnxietyLevel.leve,
-      recommendations: 'Respiración 4-7, exposición',
+      recommendations: 'Respiración 4-7, exposición gradual',
     ),
     PatientReport(
       name: 'Luis Pérez',
       avatar:
           'https://ui-avatars.com/api/?name=Luis+Perez&background=3b82f6&color=ffffff&size=128',
-      diagnosis: 'Ansiedad',
+      diagnosis: 'Depresión',
       level: AnxietyLevel.moderado,
-      recommendations: 'Respiración 4-7, exposición',
+      recommendations: 'Terapia cognitiva, ejercicio',
     ),
     PatientReport(
       name: 'Carla Ruiz',
       avatar:
           'https://ui-avatars.com/api/?name=Carla+Ruiz&background=3b82f6&color=ffffff&size=128',
-      diagnosis: 'Ansiedad',
+      diagnosis: 'Estrés postraumático',
       level: AnxietyLevel.leve,
-      recommendations: 'Respiración 4-7, exposición',
+      recommendations: 'EMDR, técnicas de relajación',
+    ),
+  ];
+
+  // Citas agendadas simuladas
+  final List<Appointment> _appointments = [
+    Appointment(
+      patientName: 'Ana García',
+      time: '09:00',
+      duration: 50,
+      type: 'Sesión individual',
+      status: 'Confirmada',
+    ),
+    Appointment(
+      patientName: 'Luis Pérez',
+      time: '11:00',
+      duration: 50,
+      type: 'Sesión individual',
+      status: 'Confirmada',
+    ),
+    Appointment(
+      patientName: 'Carla Ruiz',
+      time: '15:00',
+      duration: 50,
+      type: 'Sesión individual',
+      status: 'Pendiente',
+    ),
+    Appointment(
+      patientName: 'María López',
+      time: '16:30',
+      duration: 50,
+      type: 'Sesión individual',
+      status: 'Confirmada',
     ),
   ];
 
@@ -359,9 +407,9 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
               child: _buildActionCard(
                 icon: Icons.calendar_today_outlined,
                 title: 'Agenda',
-                subtitle: '3 citas hoy',
+                subtitle: '${_getTodayAppointments().length} citas hoy',
                 color: const Color(0xFF10B981),
-                onTap: () => _showSnackBar('Agenda próximamente'),
+                onTap: () => _showAgendaDialog(),
               ),
             ),
           ],
@@ -385,7 +433,7 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
                 title: 'Nueva Nota',
                 subtitle: 'Agregar registro',
                 color: const Color(0xFFF59E0B),
-                onTap: () => _showSnackBar('Nueva nota próximamente'),
+                onTap: () => _showNewNoteDialog(),
               ),
             ),
           ],
@@ -473,11 +521,11 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
             color: Color(0xFF1F2937),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         ...List.generate(_recentReports.length, (index) {
           final report = _recentReports[index];
           return Container(
-            margin: const EdgeInsets.only(bottom: 16),
+            margin: const EdgeInsets.only(bottom: 12),
             child: _buildReportCard(report),
           );
         }),
@@ -487,7 +535,7 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
 
   Widget _buildReportCard(PatientReport report) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -503,154 +551,172 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
           width: 1,
         ),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Avatar del paciente con indicador de estado
-          Stack(
+          // Primera fila: Avatar y información básica
+          Row(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFF3B82F6), width: 3),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF3B82F6).withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
+              // Avatar del paciente con indicador de estado
+              Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: const Color(0xFF3B82F6), width: 3),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF3B82F6).withOpacity(0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: CircleAvatar(
+                      radius: 24,
+                      backgroundImage: NetworkImage(report.avatar),
+                      backgroundColor: const Color(0xFF3B82F6),
+                      onBackgroundImageError: (exception, stackTrace) {
+                        // En caso de error, se mostrará el backgroundColor
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 2,
+                    right: 2,
+                    child: Container(
+                      width: 14,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: _getStatusColor(report.level),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 12),
+
+              // Información del paciente
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            report.name,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1F2937),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: _getStatusColor(report.level).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            _getAnxietyLevelText(report.level).toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w600,
+                              color: _getStatusColor(report.level),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Dx: ${report.diagnosis}',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF6B7280),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
-                ),
-                child: CircleAvatar(
-                  radius: 28,
-                  backgroundImage: NetworkImage(report.avatar),
-                  backgroundColor: const Color(0xFF3B82F6),
-                  onBackgroundImageError: (exception, stackTrace) {
-                    // En caso de error, se mostrará el backgroundColor
-                  },
-                ),
-              ),
-              Positioned(
-                bottom: 2,
-                right: 2,
-                child: Container(
-                  width: 16,
-                  height: 16,
-                  decoration: BoxDecoration(
-                    color: _getStatusColor(report.level),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2),
-                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(width: 16),
-
-          // Información del reporte
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+          
+          const SizedBox(height: 12),
+          
+          // Segunda fila: Recomendaciones
+          Text(
+            'Recs: ${report.recommendations}',
+            style: const TextStyle(
+              fontSize: 12,
+              color: Color(0xFF9CA3AF),
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
+          
+          const SizedBox(height: 12),
+          
+          // Tercera fila: Botón de acción
+          SizedBox(
+            width: double.infinity,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
+                ),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF3B82F6).withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/patient-mental-wellbeing',
+                    arguments: report.name,
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                  shadowColor: Colors.transparent,
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      report.name,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF1F2937),
-                      ),
+                      'Ver detalle',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                     ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: _getStatusColor(report.level).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        _getAnxietyLevelText(report.level).toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          color: _getStatusColor(report.level),
-                        ),
-                      ),
-                    ),
+                    SizedBox(width: 6),
+                    Icon(Icons.arrow_forward_ios, size: 14),
                   ],
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  'Dx: ${report.diagnosis}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF6B7280),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Recs: ${report.recommendations}',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF9CA3AF),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Botón Ver detalle mejorado
-          Container(
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
-              ),
-              borderRadius: BorderRadius.circular(25),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF3B82F6).withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: ElevatedButton(
-              onPressed: () {
-                // Acción para ver detalles
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Ver detalles de ${report.name}'),
-                    backgroundColor: const Color(0xFF3B82F6),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                elevation: 0,
-                shadowColor: Colors.transparent,
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Ver detalle',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(width: 4),
-                  Icon(Icons.arrow_forward_ios, size: 12),
-                ],
               ),
             ),
           ),
@@ -668,5 +734,381 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
       case AnxietyLevel.severo:
         return const Color(0xFFEF4444);
     }
+  }
+
+  List<Appointment> _getTodayAppointments() {
+    return _appointments.where((appointment) => 
+      appointment.status == 'Confirmada' || appointment.status == 'Pendiente'
+    ).toList();
+  }
+
+  void _showAgendaDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 20,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF10B981).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.calendar_today,
+                      color: Color(0xFF10B981),
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Text(
+                      'Agenda de Hoy',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1F2937),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(Icons.close),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              if (_getTodayAppointments().isEmpty)
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    'No hay citas programadas para hoy',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF6B7280),
+                    ),
+                  ),
+                )
+              else
+                ..._getTodayAppointments().map((appointment) => 
+                  _buildAppointmentCard(appointment)
+                ),
+              const SizedBox(height: 20),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF10B981), Color(0xFF059669)],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _showSnackBar('Funcionalidad de agenda completa próximamente');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: const Text(
+                    'Ver Agenda Completa',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAppointmentCard(Appointment appointment) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: appointment.status == 'Confirmada' 
+          ? const Color(0xFF10B981).withOpacity(0.1)
+          : const Color(0xFFF59E0B).withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: appointment.status == 'Confirmada'
+            ? const Color(0xFF10B981).withOpacity(0.3)
+            : const Color(0xFFF59E0B).withOpacity(0.3),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: appointment.status == 'Confirmada'
+                ? const Color(0xFF10B981)
+                : const Color(0xFFF59E0B),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              appointment.time,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  appointment.patientName,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1F2937),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '${appointment.type} • ${appointment.duration} min',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF6B7280),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: appointment.status == 'Confirmada'
+                ? const Color(0xFF10B981)
+                : const Color(0xFFF59E0B),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              appointment.status,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showNewNoteDialog() {
+    String selectedPatient = _recentReports.first.name;
+    final TextEditingController noteController = TextEditingController();
+    final TextEditingController recommendationController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 20,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: StatefulBuilder(
+            builder: (context, setState) => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF59E0B).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(
+                        Icons.note_add,
+                        color: Color(0xFFF59E0B),
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    const Expanded(
+                      child: Text(
+                        'Nueva Nota Clínica',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1F2937),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.close),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                
+                // Selector de paciente
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF59E0B).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: const Color(0xFFF59E0B).withOpacity(0.3),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Seleccionar Paciente',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1F2937),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      DropdownButton<String>(
+                        value: selectedPatient,
+                        isExpanded: true,
+                        underline: Container(),
+                        items: _recentReports.map((report) => 
+                          DropdownMenuItem(
+                            value: report.name,
+                            child: Text(report.name),
+                          ),
+                        ).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedPatient = value!;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                
+                // Campo de nota
+                TextField(
+                  controller: noteController,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    labelText: 'Notas de la sesión',
+                    hintText: 'Describe las observaciones y progreso del paciente...',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFFF59E0B)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                
+                // Campo de recomendaciones
+                TextField(
+                  controller: recommendationController,
+                  maxLines: 2,
+                  decoration: InputDecoration(
+                    labelText: 'Recomendaciones',
+                    hintText: 'Ejercicios, tareas o recomendaciones para el paciente...',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFFF59E0B)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                
+                // Botones de acción
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey[300],
+                          foregroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text('Cancelar'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          _showSnackBar('Nota guardada para $selectedPatient');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFF59E0B),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text('Guardar Nota'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

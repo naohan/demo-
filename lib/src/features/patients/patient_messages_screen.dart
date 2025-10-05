@@ -312,6 +312,8 @@ class _PatientMessagesScreenState extends State<PatientMessagesScreen>
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF1F2937),
                   ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
             ],
@@ -332,6 +334,8 @@ class _PatientMessagesScreenState extends State<PatientMessagesScreen>
               color: Color(0xFF374151),
               height: 1.4,
             ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 8),
           const Text(
@@ -349,25 +353,8 @@ class _PatientMessagesScreenState extends State<PatientMessagesScreen>
               color: Color(0xFF374151),
               height: 1.4,
             ),
-          ),
-          // Indicador de overflow como en la imagen
-          Container(
-            margin: const EdgeInsets.only(top: 8),
-            height: 20,
-            decoration: BoxDecoration(
-              color: Colors.yellow.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: const Center(
-              child: Text(
-                'BOTTOM OVERFLOWED BY 38 PIXELS',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

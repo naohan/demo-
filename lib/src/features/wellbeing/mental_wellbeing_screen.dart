@@ -1185,7 +1185,7 @@ class _MentalWellbeingScreenState extends State<MentalWellbeingScreen> {
                   child: Column(
                     children: [
                       // Night wellbeing scale
-                      _buildScale('¿Cómo te sientes esta noche?', _nightWellbeing, (v) => setState(() => _nightWellbeing = v)),
+                      _buildScaleSmall('¿Cómo te sientes esta noche?', _nightWellbeing, (v) => setState(() => _nightWellbeing = v)),
                       const SizedBox(height: 20),
                       
                       // Night techniques
@@ -1937,6 +1937,71 @@ class _MentalWellbeingScreenState extends State<MentalWellbeingScreen> {
               divisions: 4,
               label: value.round().toString(),
               value: value,
+              onChanged: onChanged,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildScaleSmall(String label, double value, ValueChanged<double> onChanged) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF2C3E50),
+              ),
+            ),
+            const Spacer(),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF8E44AD), Color(0xFF9B59B6)],
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                '${value.round()}/5',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: const Color(0xFF8E44AD).withOpacity(0.2),
+              width: 1,
+            ),
+          ),
+          child: SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              activeTrackColor: const Color(0xFF8E44AD),
+              inactiveTrackColor: const Color(0xFF8E44AD).withOpacity(0.3),
+              thumbColor: const Color(0xFF8E44AD),
+              overlayColor: const Color(0xFF8E44AD).withOpacity(0.2),
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+            ),
+            child: Slider(
+              value: value,
+              min: 1,
+              max: 5,
+              divisions: 4,
               onChanged: onChanged,
             ),
           ),

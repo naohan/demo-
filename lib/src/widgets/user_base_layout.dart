@@ -50,7 +50,7 @@ class UserBaseLayout extends StatelessWidget {
           ),
         ),
         title: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
@@ -60,7 +60,7 @@ class UserBaseLayout extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: const Color(0xFF4A90A4).withOpacity(0.3),
               width: 1,
@@ -69,13 +69,14 @@ class UserBaseLayout extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset('assets/logo/logo_S.png', width: 24, height: 24),
-              const SizedBox(width: 8),
+              Image.asset('assets/logo/logo_S.png', width: 16, height: 16),
+              const SizedBox(width: 6),
               Text(
                 'Serenity',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFF2C3E50),
+                  fontSize: 14,
                 ),
               ),
             ],
@@ -85,7 +86,7 @@ class UserBaseLayout extends StatelessWidget {
           ...?actions,
           Container(
             margin: const EdgeInsets.only(right: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [

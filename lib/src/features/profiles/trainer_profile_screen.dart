@@ -61,23 +61,24 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return TrainerBaseLayout(
-      title: 'Mi Perfil Entrenador',
+      title: 'Mi Perfil',
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildProfileHeader(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             _buildPersonalInfo(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             _buildCertifications(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             _buildTrainingTools(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             _buildClientAccess(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             _buildSettings(),
+            const SizedBox(height: 16), // Espacio adicional al final
           ],
         ),
       ),
@@ -86,7 +87,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
   Widget _buildProfileHeader() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -96,12 +97,12 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
             const Color(0xFF4ECDC4).withOpacity(0.1),
           ],
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -110,11 +111,11 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
           Stack(
             children: [
               CircleAvatar(
-                radius: 40,
+                radius: 24,
                 backgroundColor: const Color(0xFFFF6B6B).withOpacity(0.2),
                 child: const Icon(
                   Icons.fitness_center,
-                  size: 40,
+                  size: 24,
                   color: Color(0xFFFF6B6B),
                 ),
               ),
@@ -122,7 +123,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 bottom: 0,
                 right: 0,
                 child: Container(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(2),
                   decoration: const BoxDecoration(
                     color: Color(0xFF2ECC71),
                     shape: BoxShape.circle,
@@ -130,13 +131,13 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   child: const Icon(
                     Icons.verified,
                     color: Colors.white,
-                    size: 16,
+                    size: 10,
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,28 +145,30 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 Text(
                   _profileData['name'],
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF2C3E50),
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
                   _profileData['specialty'],
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     color: Colors.grey[600],
                     fontWeight: FontWeight.w500,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Row(
                   children: [
-                    Icon(Icons.star, size: 14, color: Colors.amber),
-                    const SizedBox(width: 4),
+                    Icon(Icons.star, size: 10, color: Colors.amber),
+                    const SizedBox(width: 3),
                     Text(
                       '${_profileData['rating']} • ${_profileData['clientsCount']} clientes',
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      style: TextStyle(fontSize: 10, color: Colors.grey[600]),
                     ),
                   ],
                 ),
@@ -177,7 +180,10 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
             icon: Icon(
               _isEditing ? Icons.check : Icons.edit,
               color: const Color(0xFFFF6B6B),
+              size: 16,
             ),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
           ),
         ],
       ),
@@ -229,17 +235,17 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
   Widget _buildCertificationCard(Map<String, String> cert) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey.withOpacity(0.2)),
       ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               color: const Color(0xFF2ECC71).withOpacity(0.1),
               shape: BoxShape.circle,
@@ -247,10 +253,10 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
             child: const Icon(
               Icons.verified,
               color: Color(0xFF2ECC71),
-              size: 20,
+              size: 12,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,29 +264,33 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 Text(
                   cert['title']!,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF2C3E50),
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   '${cert['institution']} • ${cert['year']}',
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
             decoration: BoxDecoration(
               color: const Color(0xFF2ECC71),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
               cert['status']!,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 10,
+                fontSize: 8,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -400,14 +410,14 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
     required Widget child,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
+            blurRadius: 6,
             offset: const Offset(0, 2),
           ),
         ],
@@ -417,19 +427,19 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
         children: [
           Row(
             children: [
-              Icon(icon, color: const Color(0xFFFF6B6B), size: 20),
-              const SizedBox(width: 8),
+              Icon(icon, color: const Color(0xFFFF6B6B), size: 16),
+              const SizedBox(width: 6),
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF2C3E50),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           child,
         ],
       ),
@@ -438,28 +448,30 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
   Widget _buildInfoTile(String label, String value, IconData icon) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 6),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: Colors.grey[600]),
-          const SizedBox(width: 12),
+          Icon(icon, size: 12, color: Colors.grey[600]),
+          const SizedBox(width: 6),
           Text(
             '$label:',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 11,
               color: Colors.grey[600],
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
           Expanded(
             child: Text(
               value,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 11,
                 color: Color(0xFF2C3E50),
                 fontWeight: FontWeight.w500,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
@@ -510,16 +522,16 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
   Widget _buildToolCard(String title, String description, IconData icon) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
-          Icon(icon, color: const Color(0xFFFF6B6B), size: 20),
-          const SizedBox(width: 12),
+          Icon(icon, color: const Color(0xFFFF6B6B), size: 14),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -527,14 +539,18 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF2C3E50),
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   description,
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -546,11 +562,11 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
   Widget _buildAccessItem(String title, String description, bool hasAccess) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: hasAccess ? Colors.green[50] : Colors.orange[50],
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color:
               hasAccess
@@ -563,9 +579,9 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
           Icon(
             hasAccess ? Icons.check_circle : Icons.lock,
             color: hasAccess ? Colors.green : Colors.orange,
-            size: 20,
+            size: 14,
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -573,14 +589,18 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF2C3E50),
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   description,
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -597,18 +617,18 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
           SnackBar(content: Text('Abriendo configuración de $title')),
         );
       },
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(8),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.only(bottom: 6),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: Colors.grey[50],
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
           children: [
-            Icon(icon, color: const Color(0xFFFF6B6B), size: 20),
-            const SizedBox(width: 12),
+            Icon(icon, color: const Color(0xFFFF6B6B), size: 14),
+            const SizedBox(width: 8),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -616,19 +636,23 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   Text(
                     title,
                     style: const TextStyle(
-                      fontSize: 14,
+                      fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF2C3E50),
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     description,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+            const Icon(Icons.arrow_forward_ios, size: 12, color: Colors.grey),
           ],
         ),
       ),

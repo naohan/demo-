@@ -171,7 +171,7 @@ class _PatientsListScreenState extends State<PatientsListScreen> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.9,
+                  childAspectRatio: 1.1,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                 ),
@@ -190,7 +190,7 @@ class _PatientsListScreenState extends State<PatientsListScreen> {
 
   Widget _buildPatientCard(Patient patient) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -207,7 +207,7 @@ class _PatientsListScreenState extends State<PatientsListScreen> {
         ),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Avatar del paciente
           Container(
@@ -223,24 +223,25 @@ class _PatientsListScreenState extends State<PatientsListScreen> {
               ],
             ),
             child: CircleAvatar(
-              radius: 35,
+              radius: 25,
               backgroundImage: NetworkImage(patient.avatar),
               backgroundColor: const Color(0xFF3B82F6),
-              child: const Icon(Icons.person, color: Colors.white, size: 35),
+              child: const Icon(Icons.person, color: Colors.white, size: 25),
             ),
           ),
-          const SizedBox(height: 16),
 
           // Nombre del paciente
           Text(
             patient.name,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
               color: Color(0xFF1F2937),
             ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 16),
 
           // Botón Ver
           Container(
@@ -249,7 +250,7 @@ class _PatientsListScreenState extends State<PatientsListScreen> {
               gradient: const LinearGradient(
                 colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
               ),
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
                   color: const Color(0xFF3B82F6).withOpacity(0.3),
@@ -269,9 +270,9 @@ class _PatientsListScreenState extends State<PatientsListScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 elevation: 0,
                 shadowColor: Colors.transparent,

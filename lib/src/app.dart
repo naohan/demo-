@@ -24,6 +24,7 @@ import 'features/profile/profile_screen.dart';
 import 'features/profile/profile_router_screen.dart';
 import 'features/patients/patients_list_screen.dart';
 import 'features/patients/patient_detail_screen.dart';
+import 'features/patients/patient_mental_wellbeing_screen.dart';
 import 'features/patients/patient_calendar_screen.dart';
 import 'features/patients/patient_notes_screen.dart';
 import 'features/patients/patient_chat_screen.dart';
@@ -69,6 +70,11 @@ class CalmmindApp extends StatelessWidget {
           final patientName =
               ModalRoute.of(context)?.settings.arguments as String?;
           return PatientDetailScreen(patientName: patientName);
+        },
+        PatientMentalWellbeingScreen.route: (context) {
+          final patientName =
+              ModalRoute.of(context)?.settings.arguments as String?;
+          return PatientMentalWellbeingScreen(patientName: patientName ?? 'Paciente');
         },
         PatientCalendarScreen.route: (context) {
           final patientName =
