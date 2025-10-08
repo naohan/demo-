@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/user_session.dart';
+import '../features/community/mind/community_mind_psychologists_interactive_screen.dart';
 
 class PsychologistBaseLayout extends StatelessWidget {
   final String title;
@@ -343,7 +344,10 @@ class PsychologistBaseLayout extends StatelessWidget {
                     title: 'Comunidad Mental',
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/community-mind');
+                      Navigator.pushNamed(
+                        context,
+                        CommunityMindPsychologistsInteractiveScreen.route,
+                      );
                     },
                   ),
                   _buildDrawerItem(

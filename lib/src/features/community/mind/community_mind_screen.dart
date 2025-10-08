@@ -62,63 +62,99 @@ class _CommunityMindScreenState extends State<CommunityMindScreen> {
                 context,
                 icon: Icons.forum,
                 title: 'Foros de Discusión',
-                subtitle: 'Participa en conversaciones sobre temas de salud mental',
+                subtitle:
+                    'Participa en conversaciones sobre temas de salud mental',
               ),
               const SizedBox(height: 15),
               _buildFeatureCard(
                 context,
                 icon: Icons.group,
                 title: 'Grupos de Apoyo',
-                subtitle: 'Conecta con personas que comparten experiencias similares',
+                subtitle:
+                    'Conecta con personas que comparten experiencias similares',
               ),
               const SizedBox(height: 15),
               _buildFeatureCard(
                 context,
                 icon: Icons.local_library,
                 title: 'Recursos Educativos',
-                subtitle: 'Accede a artículos y material educativo especializado',
+                subtitle:
+                    'Accede a artículos y material educativo especializado',
               ),
               const SizedBox(height: 20),
-              
+
               // Sección de eventos
               _buildSectionCard(
                 context,
                 title: 'Próximos Eventos',
                 children: [
-                  _buildEventCard('Meditación Grupal', 'Sábado 15:00', Icons.self_improvement),
-                  _buildEventCard('Taller de Ansiedad', 'Domingo 10:00', Icons.psychology),
-                  _buildEventCard('Grupo de Apoyo', 'Lunes 19:00', Icons.support),
+                  _buildEventCard(
+                    'Meditación Grupal',
+                    'Sábado 15:00',
+                    Icons.self_improvement,
+                  ),
+                  _buildEventCard(
+                    'Taller de Ansiedad',
+                    'Domingo 10:00',
+                    Icons.psychology,
+                  ),
+                  _buildEventCard(
+                    'Grupo de Apoyo',
+                    'Lunes 19:00',
+                    Icons.support,
+                  ),
                 ],
               ),
-              
+
               const SizedBox(height: 20),
-              
+
               // Sección de recursos
               _buildSectionCard(
                 context,
                 title: 'Recursos Destacados',
                 children: [
-                  _buildResourceCard('Guía de Mindfulness', 'Aprende técnicas de atención plena', Icons.book),
-                  _buildResourceCard('Ejercicios de Respiración', 'Técnicas para reducir el estrés', Icons.air),
-                  _buildResourceCard('Diario de Emociones', 'Registra y analiza tus emociones', Icons.edit),
+                  _buildResourceCard(
+                    'Guía de Mindfulness',
+                    'Aprende técnicas de atención plena',
+                    Icons.book,
+                  ),
+                  _buildResourceCard(
+                    'Ejercicios de Respiración',
+                    'Técnicas para reducir el estrés',
+                    Icons.air,
+                  ),
+                  _buildResourceCard(
+                    'Diario de Emociones',
+                    'Registra y analiza tus emociones',
+                    Icons.edit,
+                  ),
                 ],
               ),
-              
+
               const SizedBox(height: 20),
-              
+
               // Sección de testimonios
               _buildSectionCard(
                 context,
                 title: 'Testimonios de la Comunidad',
                 children: [
-                  _buildTestimonialCard('María', 'Esta comunidad me ha ayudado mucho en mi proceso de sanación. Gracias por el apoyo.'),
-                  _buildTestimonialCard('Carlos', 'Los recursos educativos son excelentes. He aprendido técnicas muy útiles.'),
-                  _buildTestimonialCard('Ana', 'El grupo de apoyo me ha dado la fuerza para seguir adelante.'),
+                  _buildTestimonialCard(
+                    'María',
+                    'Esta comunidad me ha ayudado mucho en mi proceso de sanación. Gracias por el apoyo.',
+                  ),
+                  _buildTestimonialCard(
+                    'Carlos',
+                    'Los recursos educativos son excelentes. He aprendido técnicas muy útiles.',
+                  ),
+                  _buildTestimonialCard(
+                    'Ana',
+                    'El grupo de apoyo me ha dado la fuerza para seguir adelante.',
+                  ),
                 ],
               ),
-              
+
               const SizedBox(height: 40),
-              
+
               // Botón para ingresar a la comunidad
               Container(
                 width: double.infinity,
@@ -143,17 +179,16 @@ class _CommunityMindScreenState extends State<CommunityMindScreen> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(30),
                     onTap: () {
-                      Navigator.pushNamed(context, '/community-mind-interactive');
+                      Navigator.pushNamed(
+                        context,
+                        '/community-mind-interactive',
+                      );
                     },
                     child: const Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            Icons.group_add,
-                            color: Colors.white,
-                            size: 24,
-                          ),
+                          Icon(Icons.group_add, color: Colors.white, size: 24),
                           SizedBox(width: 12),
                           Text(
                             'Ingresar a la Comunidad',
@@ -239,7 +274,11 @@ class _CommunityMindScreenState extends State<CommunityMindScreen> {
     );
   }
 
-  Widget _buildSectionCard(BuildContext context, {required String title, required List<Widget> children}) {
+  Widget _buildSectionCard(
+    BuildContext context, {
+    required String title,
+    required List<Widget> children,
+  }) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
