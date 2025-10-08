@@ -17,22 +17,16 @@ class _HomeTrainerScreenState extends State<HomeTrainerScreen> {
     return TrainerBaseLayout(
       title: 'Home Entrenador',
       hero: Container(
-        padding: const EdgeInsets.all(20),
+        height: 160,
+        width: double.infinity,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              const Color(0xFF3498DB).withOpacity(0.1),
-              const Color(0xFF2ECC71).withOpacity(0.05),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: const Color(0xFF4CAF50).withOpacity(0.08)),
+          image: DecorationImage(
+            image: AssetImage('assets/banner/banner-trainer.png'),
+            fit: BoxFit.cover, // ocupa todo el rectángulo
+            alignment: Alignment.center,
           ),
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          Icons.fitness_center,
-          size: 64,
-          color: Color(0xFF3498DB),
         ),
       ),
       child: Padding(
@@ -45,28 +39,28 @@ class _HomeTrainerScreenState extends State<HomeTrainerScreen> {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    const Color(0xFF3498DB).withOpacity(0.1),
-                    const Color(0xFF2ECC71).withOpacity(0.1),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFF66BB6A).withOpacity(0.08),
+                      const Color(0xFF4CAF50).withOpacity(0.06),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: const Color(0xFF4CAF50).withOpacity(0.18),
+                    width: 1,
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: const Color(0xFF3498DB).withOpacity(0.2),
-                  width: 1,
-                ),
-              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     '¡Bienvenido, Coach!',
-                    style: theme.textTheme.headlineSmall?.copyWith(
+                      style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xFF3498DB),
+                      color: const Color(0xFF4CAF50),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -104,7 +98,7 @@ class _HomeTrainerScreenState extends State<HomeTrainerScreen> {
                     title: 'Mis Clientes',
                     subtitle: 'Gestionar entrenamientos',
                     icon: Icons.group,
-                    color: const Color(0xFF3498DB),
+                    color: const Color(0xFF4CAF50),
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Función en desarrollo')),
@@ -116,7 +110,7 @@ class _HomeTrainerScreenState extends State<HomeTrainerScreen> {
                     title: 'Rutinas',
                     subtitle: 'Crear y editar',
                     icon: Icons.fitness_center,
-                    color: const Color(0xFF2ECC71),
+                    color: const Color(0xFF4CAF50),
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Función en desarrollo')),
@@ -128,7 +122,7 @@ class _HomeTrainerScreenState extends State<HomeTrainerScreen> {
                     title: 'Calendario',
                     subtitle: 'Horarios y citas',
                     icon: Icons.calendar_today,
-                    color: const Color(0xFFE74C3C),
+                    color: const Color(0xFF4CAF50),
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Función en desarrollo')),
@@ -140,7 +134,7 @@ class _HomeTrainerScreenState extends State<HomeTrainerScreen> {
                     title: 'Comunidad',
                     subtitle: 'Interactuar y compartir',
                     icon: Icons.forum,
-                    color: const Color(0xFF9B59B6),
+                    color: const Color(0xFF4CAF50),
                     onTap: () {
                       Navigator.pushNamed(context, '/community-vital');
                     },
@@ -150,7 +144,7 @@ class _HomeTrainerScreenState extends State<HomeTrainerScreen> {
                     title: 'Estadísticas',
                     subtitle: 'Progreso de clientes',
                     icon: Icons.analytics,
-                    color: const Color(0xFFF39C12),
+                    color: const Color(0xFF4CAF50),
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Función en desarrollo')),
@@ -162,7 +156,7 @@ class _HomeTrainerScreenState extends State<HomeTrainerScreen> {
                     title: 'Perfil',
                     subtitle: 'Mi información',
                     icon: Icons.person,
-                    color: const Color(0xFF34495E),
+                    color: const Color(0xFF4CAF50),
                     onTap: () {
                       Navigator.pushNamed(context, '/profile');
                     },
