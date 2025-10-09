@@ -65,62 +65,41 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _pickTime() async {
-    final t = await showTimePicker(context: context, initialTime: _selectedTime);
-    if (t != null) setState(() => _selectedTime = t);
-  }
-
   Future<void> _playTrack(int index) async {
-    setState(() => _currentTrack = index);
-    
-    // URLs de audio que funcionan correctamente
-    final workingUrls = [
-      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
-      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
-      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
-    ];
-    
-    // URLs alternativas que funcionan
-    final alternativeUrls = [
-      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
-      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
-      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
-    ];
-    
-    try {
-      await _player.stop();
-      
-      // Mostrar mensaje de reproducción
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Reproduciendo pista ${index + 1}...'),
-          backgroundColor: const Color(0xFF4A90A4),
-          duration: const Duration(seconds: 2),
-        ),
-      );
-      
-      // Reproducir audio directamente desde URL
-      await _player.play(UrlSource(workingUrls[index]));
-      
-    } catch (e) {
-      print('Error playing audio: $e');
-      try {
-        // Intentar con URL alternativa
-        await _player.play(UrlSource(alternativeUrls[index]));
-      } catch (e2) {
-        print('Error with alternative audio: $e2');
-        // Mostrar mensaje de error más específico
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Audio temporalmente no disponible. Los archivos MP3 necesitan ser convertidos a un formato compatible.'),
-            backgroundColor: Colors.orange,
-            duration: Duration(seconds: 4),
-          ),
-        );
-        setState(() => _currentTrack = null);
-      }
-    }
+  setState(() => _currentTrack = index);
+
+  // Rutas locales de tus audios dentro de /assets/audio/
+  final localTracks = [
+    'audio/conciliar_sueno.mp3',
+    'audio/audio_concentracion.mp3',
+    'audio/audio_relajamiento.mp3',
+  ];
+
+  try {
+    await _player.stop();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Reproduciendo: ${localTracks[index].split('/').last}'),
+        backgroundColor: const Color(0xFF4A90A4),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+
+    // ✅ Aquí la clave: usar AssetSource para reproducir desde assets
+    await _player.play(AssetSource(localTracks[index]));
+  } catch (e) {
+    print('Error reproduciendo audio: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Error al reproducir el audio'),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 2),
+      ),
+    );
+    setState(() => _currentTrack = null);
   }
+}
 
   Future<void> _pauseOrResume() async {
     final state = await _player.state;
@@ -1161,45 +1140,46 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildMusicTrack(int trackNumber, bool isCurrent, String audioName, String emoji) {
-    return InkWell(
-      onTap: () => _playTrack(trackNumber - 1),
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: isCurrent 
+Widget _buildMusicTrack(int trackNumber, bool isCurrent, String audioName, String emoji) {
+  return InkWell(
+    onTap: () => _playTrack(trackNumber - 1),
+    borderRadius: BorderRadius.circular(20),
+    child: Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: isCurrent
               ? [const Color(0xFFE91E63).withOpacity(0.15), const Color(0xFFE91E63).withOpacity(0.08)]
               : [Colors.white, Colors.grey[50]!],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isCurrent 
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isCurrent
               ? const Color(0xFFE91E63).withOpacity(0.4)
               : Colors.grey[200]!,
-            width: isCurrent ? 2 : 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: isCurrent 
+          width: isCurrent ? 2 : 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isCurrent
                 ? const Color(0xFFE91E63).withOpacity(0.2)
                 : Colors.black.withOpacity(0.08),
-              blurRadius: isCurrent ? 20 : 10,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            // Contenedor del emoji y botón de play
-            Container(
-              width: 70,
-              height: 70,
-              decoration: BoxDecoration(
-                gradient: isCurrent 
+            blurRadius: isCurrent ? 20 : 10,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // 🎵 Botón circular con emoji o ícono
+          Container(
+            width: 70,
+            height: 70,
+            decoration: BoxDecoration(
+              gradient: isCurrent
                   ? const LinearGradient(
                       colors: [Color(0xFFE91E63), Color(0xFFF06292)],
                       begin: Alignment.topLeft,
@@ -1210,87 +1190,74 @@ class _HomeScreenState extends State<HomeScreen> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                borderRadius: BorderRadius.circular(18),
-                boxShadow: [
-                  BoxShadow(
-                    color: isCurrent 
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: [
+                BoxShadow(
+                  color: isCurrent
                       ? const Color(0xFFE91E63).withOpacity(0.3)
                       : Colors.grey.withOpacity(0.2),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Emoji de fondo
-                  Opacity(
-                    opacity: isCurrent ? 0.3 : 0.2,
-                    child: Text(
-                      emoji,
-                      style: const TextStyle(
-                        fontSize: 32,
-                      ),
-                    ),
-                  ),
-                  // Icono de play o pista
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.9),
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: isCurrent 
-                      ? const Icon(
-                          Icons.pause,
-                          color: Color(0xFFE91E63),
-                          size: 24,
-                        )
-                      : Image.asset(
-                          'assets/home/pista.png',
-                          width: 24,
-                          height: 24,
-                          color: Colors.grey[600],
-                          errorBuilder: (context, error, stackTrace) => const Icon(
-                            Icons.play_arrow,
-                            color: Colors.grey,
-                            size: 24,
-                          ),
-                        ),
-                  ),
-                ],
-              ),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
-            const SizedBox(width: 16),
-            // Información de la pista
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Text(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Opacity(
+                  opacity: isCurrent ? 0.3 : 0.2,
+                  child: Text(
+                    emoji,
+                    style: const TextStyle(fontSize: 32),
+                  ),
+                ),
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: isCurrent
+                      ? const Icon(Icons.pause, color: Color(0xFFE91E63), size: 24)
+                      : Icon(Icons.play_arrow, color: Colors.grey[700], size: 24),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(width: 12),
+
+          // 📋 Texto y barra de progreso
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
                         'Pista $trackNumber',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: isCurrent ? const Color(0xFFE91E63) : Colors.grey[700],
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(width: 8),
-                      if (isCurrent)
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    ),
+                    const SizedBox(width: 6),
+                    if (isCurrent)
+                      Flexible(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: const Color(0xFFE91E63),
                             borderRadius: BorderRadius.circular(12),
@@ -1299,31 +1266,35 @@ class _HomeScreenState extends State<HomeScreen> {
                             'REPRODUCIENDO',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 10,
+                              fontSize: 9,
                               fontWeight: FontWeight.bold,
                             ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                    ],
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  audioName,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: isCurrent
+                        ? const Color(0xFFE91E63).withOpacity(0.8)
+                        : Colors.grey[600],
+                    fontWeight: FontWeight.w500,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    audioName,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: isCurrent ? const Color(0xFFE91E63).withOpacity(0.8) : Colors.grey[600],
-                      fontWeight: FontWeight.w500,
-                    ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(2),
                   ),
-                  const SizedBox(height: 8),
-                  // Barra de progreso visual
-                  Container(
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                    child: isCurrent 
+                  child: isCurrent
                       ? Container(
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
@@ -1333,49 +1304,41 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         )
                       : null,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            // Indicador de estado
-            if (isCurrent)
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE91E63),
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFFE91E63).withOpacity(0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+          ),
+
+          const SizedBox(width: 8),
+
+          // 🎚️ Indicador del estado
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: isCurrent ? const Color(0xFFE91E63) : Colors.grey[300],
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: isCurrent
+                      ? const Color(0xFFE91E63).withOpacity(0.3)
+                      : Colors.grey.withOpacity(0.2),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
-                child: const Icon(
-                  Icons.equalizer,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              )
-            else
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.music_note,
-                  color: Colors.grey[600],
-                  size: 16,
-                ),
-              ),
-          ],
-        ),
+              ],
+            ),
+            child: Icon(
+              isCurrent ? Icons.equalizer : Icons.music_note,
+              color: Colors.white,
+              size: 18,
+            ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   Widget _buildDailyAgenda() {
     return Container(
@@ -1740,6 +1703,27 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
+  Future<void> _pickTime() async {
+  final TimeOfDay? picked = await showTimePicker(
+    context: context,
+    initialTime: _selectedTime,
+  );
+
+  if (picked != null && picked != _selectedTime) {
+    setState(() {
+      _selectedTime = picked;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Hora seleccionada: ${picked.format(context)}'),
+        backgroundColor: const Color(0xFF9C27B0),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+}
+
 }
 
 class _AgendaItem {
@@ -1756,3 +1740,4 @@ extension _AgendaSort on List<_AgendaItem> {
     return copy;
   }
 }
+
