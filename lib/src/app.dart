@@ -9,6 +9,7 @@ import 'features/home/home_psychologist.dart';
 import 'features/home/home_trainer.dart';
 import 'features/community/mind/community_mind_screen.dart';
 import 'features/community/mind/community_mind_interactive_screen.dart';
+import 'features/community/mind/community_mind_psychologists_interactive_screen.dart';
 import 'features/community/vital/community_vital_screen.dart';
 import 'features/community/vital/community_vital_interactive_screen.dart';
 import 'features/community/vital/trainers_screen.dart';
@@ -51,6 +52,8 @@ class CalmmindApp extends StatelessWidget {
         HomeTrainerScreen.route: (_) => const HomeTrainerScreen(),
         CommunityMindScreen.route: (_) => const CommunityMindScreen(),
         CommunityMindInteractiveScreen.route: (_) => const CommunityMindInteractiveScreen(),
+  // New screen for psychologist-specific community
+  CommunityMindPsychologistsInteractiveScreen.route: (_) => const CommunityMindPsychologistsInteractiveScreen(),
         CommunityVitalScreen.route: (_) => const CommunityVitalScreen(),
         CommunityVitalInteractiveScreen.route: (_) => const CommunityVitalInteractiveScreen(),
         TrainersScreen.route: (_) => const TrainersScreen(),

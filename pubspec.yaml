@@ -71,6 +71,7 @@ flutter:
     - assets/bienestar_fisico/natacion.png
     - assets/bienestar_fisico/reproducir.png
     - assets/audio/
+    - assets/foto/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

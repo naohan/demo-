@@ -587,7 +587,7 @@ class _RoleBasedDrawer extends StatelessWidget {
             context,
             icon: Icons.forum,
             title: 'Comunidad Mental',
-            route: '/community-mind',
+            route: '/community-mind-psychologists-interactive',
           ),
           _buildDrawerItem(
             context,
