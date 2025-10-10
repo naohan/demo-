@@ -6,6 +6,7 @@ class TrainerBaseLayout extends StatelessWidget {
   final Widget child;
   final Widget? hero;
   final List<Widget>? actions;
+  final Widget? floatingActionButton;
 
   const TrainerBaseLayout({
     super.key,
@@ -13,6 +14,7 @@ class TrainerBaseLayout extends StatelessWidget {
     required this.child,
     this.hero,
     this.actions,
+    this.floatingActionButton,
   });
 
   @override
@@ -110,6 +112,7 @@ class TrainerBaseLayout extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: floatingActionButton,
       drawer: _buildTrainerDrawer(context),
       body: SafeArea(
         child: Container(
