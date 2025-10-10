@@ -33,7 +33,19 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
   Widget build(BuildContext context) {
     return UserBaseLayout(
       title: 'Comunidad Interactiva',
-      hero: const Icon(Icons.psychology, size: 64),
+      hero: Container(
+        height: 160,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: const Color(0xFF1565C0).withOpacity(0.08)),
+          image: const DecorationImage(
+            image: AssetImage('assets/banner/banner-comunity.png'),
+            fit: BoxFit.cover,
+            alignment: Alignment.center,
+          ),
+        ),
+      ),
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
