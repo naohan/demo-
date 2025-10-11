@@ -343,7 +343,7 @@ class PsychologistBaseLayout extends StatelessWidget {
                     title: 'Comunidad Mental',
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/community-mind');
+                      Navigator.pushNamed(context, '/community-mind-psychologists-interactive');
                     },
                   ),
                   _buildDrawerItem(

@@ -104,11 +104,7 @@ class _PsychologistProfileScreenState extends State<PsychologistProfileScreen> {
               CircleAvatar(
                 radius: 40,
                 backgroundColor: const Color(0xFF6B73FF).withOpacity(0.2),
-                child: const Icon(
-                  Icons.psychology,
-                  size: 40,
-                  color: Color(0xFF6B73FF),
-                ),
+                backgroundImage: const AssetImage('assets/foto/perfil7.jpg'),
               ),
               Positioned(
                 bottom: 0,

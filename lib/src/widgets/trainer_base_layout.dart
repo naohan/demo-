@@ -6,6 +6,7 @@ class TrainerBaseLayout extends StatelessWidget {
   final Widget child;
   final Widget? hero;
   final List<Widget>? actions;
+  final Widget? floatingActionButton;
 
   const TrainerBaseLayout({
     super.key,
@@ -13,6 +14,7 @@ class TrainerBaseLayout extends StatelessWidget {
     required this.child,
     this.hero,
     this.actions,
+    this.floatingActionButton,
   });
 
   @override
@@ -28,14 +30,14 @@ class TrainerBaseLayout extends StatelessWidget {
                 margin: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [const Color(0xFFFF6B6B), const Color(0xFF4ECDC4)],
+                    colors: [const Color(0xFF66BB6A), const Color(0xFF4CAF50)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFFF6B6B).withOpacity(0.3),
+                      color: const Color(0xFF66BB6A).withOpacity(0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 3),
                     ),
@@ -52,15 +54,15 @@ class TrainerBaseLayout extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                const Color(0xFFFF6B6B).withOpacity(0.1),
-                const Color(0xFF4ECDC4).withOpacity(0.05),
+                const Color(0xFF66BB6A).withOpacity(0.1),
+                const Color(0xFF4CAF50).withOpacity(0.05),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: const Color(0xFFFF6B6B).withOpacity(0.3),
+              color: const Color(0xFF4CAF50).withOpacity(0.3),
               width: 1,
             ),
           ),
@@ -88,15 +90,15 @@ class TrainerBaseLayout extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  const Color(0xFFFF6B6B).withOpacity(0.1),
-                  const Color(0xFF4ECDC4).withOpacity(0.05),
+                  const Color.fromARGB(255, 49, 156, 83).withOpacity(0.1),
+                  const Color(0xFF4CAF50).withOpacity(0.05),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: const Color(0xFFFF6B6B).withOpacity(0.3),
+                color: const Color.fromARGB(255, 54, 126, 56).withOpacity(0.3),
                 width: 1,
               ),
             ),
@@ -110,6 +112,7 @@ class TrainerBaseLayout extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: floatingActionButton,
       drawer: _buildTrainerDrawer(context),
       body: SafeArea(
         child: Container(
@@ -117,7 +120,7 @@ class TrainerBaseLayout extends StatelessWidget {
           height: double.infinity,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.white, const Color(0xFFFF6B6B).withOpacity(0.03)],
+              colors: [Colors.white, const Color(0xFFE8F5E8)],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -132,15 +135,15 @@ class TrainerBaseLayout extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        const Color(0xFFFF6B6B).withOpacity(0.1),
-                        const Color(0xFF4ECDC4).withOpacity(0.05),
+                        const Color(0xFF66BB6A).withOpacity(0.1),
+                        const Color(0xFF4CAF50).withOpacity(0.05),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: const Color(0xFFFF6B6B).withOpacity(0.2),
+                      color: const Color(0xFF4CAF50).withOpacity(0.2),
                       width: 1,
                     ),
                   ),
@@ -196,7 +199,7 @@ class TrainerBaseLayout extends StatelessWidget {
                     child: const Icon(
                       Icons.fitness_center,
                       size: 60,
-                      color: Color(0xFFFF6B6B),
+                      color: Color(0xFF4CAF50),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -244,8 +247,8 @@ class TrainerBaseLayout extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          const Color(0xFFFF6B6B).withOpacity(0.1),
-                          const Color(0xFF4ECDC4).withOpacity(0.1),
+                          const Color(0xFF66BB6A).withOpacity(0.1),
+                          const Color(0xFF4CAF50).withOpacity(0.1),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -261,7 +264,7 @@ class TrainerBaseLayout extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFF6B6B),
+                            color: const Color(0xFF66BB6A),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
@@ -402,7 +405,7 @@ class TrainerBaseLayout extends StatelessWidget {
                 icon: const Icon(Icons.logout),
                 label: const Text('Cerrar Sesión'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red[400],
+                  backgroundColor: const Color(0xFF4CAF50),
                   foregroundColor: Colors.white,
                   minimumSize: const Size(double.infinity, 48),
                   shape: RoundedRectangleBorder(
@@ -429,15 +432,15 @@ class TrainerBaseLayout extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              const Color(0xFFFF6B6B).withOpacity(0.1),
-              const Color(0xFF4ECDC4).withOpacity(0.1),
+              const Color(0xFF66BB6A).withOpacity(0.1),
+              const Color(0xFF4CAF50).withOpacity(0.1),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Icon(icon, color: const Color(0xFFFF6B6B), size: 20),
+        child: Icon(icon, color: const Color(0xFF66BB6A), size: 20),
       ),
       title: Text(
         title,

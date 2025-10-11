@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:serenity/src/features/trainer-functions/routines/create_edit_routine_screen.dart';
+import 'package:serenity/src/features/trainer-functions/routines/trainer_routines_screen.dart';
 import 'core/theme.dart';
 import 'features/splash/splash_screen.dart';
 import 'features/auth/login_screen.dart';
@@ -9,6 +11,7 @@ import 'features/home/home_psychologist.dart';
 import 'features/home/home_trainer.dart';
 import 'features/community/mind/community_mind_screen.dart';
 import 'features/community/mind/community_mind_interactive_screen.dart';
+import 'features/community/mind/community_mind_psychologists_interactive_screen.dart';
 import 'features/community/vital/community_vital_screen.dart';
 import 'features/community/vital/community_vital_interactive_screen.dart';
 import 'features/community/vital/trainers_screen.dart';
@@ -30,6 +33,10 @@ import 'features/patients/patient_notes_screen.dart';
 import 'features/patients/patient_chat_screen.dart';
 import 'features/patients/patient_messages_screen.dart';
 
+// Importa la pantalla de detalle de rutina
+import 'features/trainer-functions/routines/trainer_routines_detail_screen.dart';
+
+
 class CalmmindApp extends StatelessWidget {
   const CalmmindApp({super.key});
 
@@ -49,8 +56,16 @@ class CalmmindApp extends StatelessWidget {
         HomeScreen.route: (_) => const HomeScreen(),
         HomePsychologistScreen.route: (_) => const HomePsychologistScreen(),
         HomeTrainerScreen.route: (_) => const HomeTrainerScreen(),
+        //Vista de rutinas del entrenador
+        TrainerRoutinesScreen.route: (_) => const TrainerRoutinesScreen(), 
+        //Vista de detalle de rutina del entrenador
+        TrainerRoutineDetailScreen.route: (_) => const TrainerRoutineDetailScreen(),
+        //Vista de crear/editar rutina del entrenador
+        CreateEditRoutineScreen.route: (context) => const CreateEditRoutineScreen(),
         CommunityMindScreen.route: (_) => const CommunityMindScreen(),
         CommunityMindInteractiveScreen.route: (_) => const CommunityMindInteractiveScreen(),
+  // New screen for psychologist-specific community
+  CommunityMindPsychologistsInteractiveScreen.route: (_) => const CommunityMindPsychologistsInteractiveScreen(),
         CommunityVitalScreen.route: (_) => const CommunityVitalScreen(),
         CommunityVitalInteractiveScreen.route: (_) => const CommunityVitalInteractiveScreen(),
         TrainersScreen.route: (_) => const TrainersScreen(),
@@ -96,6 +111,7 @@ class CalmmindApp extends StatelessWidget {
               ModalRoute.of(context)?.settings.arguments as String?;
           return PatientMessagesScreen(patientName: patientName);
         },
+        
       },
     );
   }

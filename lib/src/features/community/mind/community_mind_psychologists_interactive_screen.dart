@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../../widgets/user_base_layout.dart';
+import '../../../widgets/psychologist_base_layout.dart';
 
-class CommunityMindInteractiveScreen extends StatefulWidget {
-  static const route = '/community-mind-interactive';
-  const CommunityMindInteractiveScreen({super.key});
+class CommunityMindPsychologistsInteractiveScreen extends StatefulWidget {
+  static const route = '/community-mind-psychologists-interactive';
+  const CommunityMindPsychologistsInteractiveScreen({super.key});
 
   @override
-  State<CommunityMindInteractiveScreen> createState() => _CommunityMindInteractiveScreenState();
+  State<CommunityMindPsychologistsInteractiveScreen> createState() =>
+      _CommunityMindPsychologistsInteractiveScreenState();
 }
 
-class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiveScreen>
+class _CommunityMindPsychologistsInteractiveScreenState
+    extends State<CommunityMindPsychologistsInteractiveScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _postController = TextEditingController();
@@ -31,28 +33,16 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
 
   @override
   Widget build(BuildContext context) {
-    return UserBaseLayout(
-      title: 'Comunidad Interactiva',
-      hero: Container(
-        height: 160,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: const Color(0xFF1565C0).withOpacity(0.08)),
-          image: const DecorationImage(
-            image: AssetImage('assets/banner/banner-comunity.png'),
-            fit: BoxFit.cover,
-            alignment: Alignment.center,
-          ),
-        ),
-      ),
+    return PsychologistBaseLayout(
+      title: 'Comunidad Profesional',
+      hero: const Icon(Icons.forum, size: 64),
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              const Color(0xFFE3F2FD),
-              const Color(0xFFBBDEFB),
-              const Color(0xFF90CAF9),
+              const Color(0xFFF5F7FF),
+              const Color(0xFFEEF6FF),
+              const Color(0xFFEEF8FF),
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -60,11 +50,11 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
         ),
         child: Column(
           children: [
-            // Tab bar personalizado mejorado
+            // Tab bar like the user one but using psychologist colors
             Container(
               margin: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.95),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(25),
                 boxShadow: [
                   BoxShadow(
@@ -74,7 +64,7 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                   ),
                 ],
                 border: Border.all(
-                  color: const Color(0xFF1565C0).withOpacity(0.2),
+                  color: const Color(0xFF6B73FF).withOpacity(0.2),
                   width: 1,
                 ),
               ),
@@ -82,80 +72,116 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                 controller: _tabController,
                 indicator: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF1565C0), Color(0xFF1976D2)],
+                    colors: [Color(0xFF6B73FF), Color(0xFF3FB0D8)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(25),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF1565C0).withOpacity(0.3),
+                      color: const Color(0xFF6B73FF).withOpacity(0.28),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
                   ],
                 ),
                 labelColor: Colors.white,
-                unselectedLabelColor: const Color(0xFF1565C0),
+                unselectedLabelColor: const Color(0xFF1F2A44),
                 labelStyle: const TextStyle(
-                  fontWeight: FontWeight.bold, 
+                  fontWeight: FontWeight.bold,
                   fontSize: 13,
                   letterSpacing: 0.5,
                 ),
                 unselectedLabelStyle: const TextStyle(
-                  fontWeight: FontWeight.w600, 
+                  fontWeight: FontWeight.w600,
                   fontSize: 13,
                 ),
                 tabs: const [
                   Tab(
-                    height: 50,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.forum, size: 20),
-                        SizedBox(height: 4),
-                        Text('Foros', style: TextStyle(fontSize: 11)),
-                      ],
+                    height: 64,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.forum, size: 24),
+                          SizedBox(height: 6),
+                          Text(
+                            'Foros',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Tab(
-                    height: 50,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.group, size: 20),
-                        SizedBox(height: 4),
-                        Text('Grupos', style: TextStyle(fontSize: 11)),
-                      ],
+                    height: 64,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.group, size: 24),
+                          SizedBox(height: 6),
+                          Text(
+                            'Grupos',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Tab(
-                    height: 50,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.library_books, size: 20),
-                        SizedBox(height: 4),
-                        Text('Recursos', style: TextStyle(fontSize: 11)),
-                      ],
+                    height: 64,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.library_books, size: 24),
+                          SizedBox(height: 6),
+                          Text(
+                            'Recursos',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Tab(
-                    height: 50,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.event, size: 20),
-                        SizedBox(height: 4),
-                        Text('Eventos', style: TextStyle(fontSize: 11)),
-                      ],
+                    height: 64,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.event, size: 24),
+                          SizedBox(height: 6),
+                          Text(
+                            'Eventos',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            
-            // Contenido de las pestañas
+
+            // Contenido
             Expanded(
               child: TabBarView(
                 controller: _tabController,
@@ -178,11 +204,8 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          // Crear nuevo post
           _buildCreatePostCard(),
           const SizedBox(height: 20),
-          
-          // Lista de posts
           ..._getForumPosts().map((post) => _buildForumPost(post)),
         ],
       ),
@@ -207,11 +230,11 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Compartir en la Comunidad',
+            'Compartir en la Comunidad Profesional',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF1565C0),
+              color: Color(0xFF6B73FF),
             ),
           ),
           const SizedBox(height: 15),
@@ -219,15 +242,18 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
             controller: _postController,
             maxLines: 3,
             decoration: InputDecoration(
-              hintText: '¿Cómo te sientes hoy? Comparte tu experiencia...',
+              hintText:
+                  'Comparte un caso clínico (anónimo), pregunta de supervisión o recurso...',
               hintStyle: TextStyle(color: Colors.grey[500]),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: const Color(0xFF1565C0).withOpacity(0.3)),
+                borderSide: BorderSide(
+                  color: const Color(0xFF6B73FF).withOpacity(0.3),
+                ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Color(0xFF1565C0)),
+                borderSide: const BorderSide(color: Color(0xFF6B73FF)),
               ),
             ),
           ),
@@ -239,7 +265,10 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                 onPressed: () {
                   _postController.clear();
                 },
-                child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
+                child: const Text(
+                  'Cancelar',
+                  style: TextStyle(color: Colors.grey),
+                ),
               ),
               const SizedBox(width: 10),
               ElevatedButton(
@@ -250,12 +279,15 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1565C0),
+                  backgroundColor: const Color(0xFF6B73FF),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                child: const Text('Publicar', style: TextStyle(color: Colors.white)),
+                child: const Text(
+                  'Publicar',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -278,20 +310,19 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
           ),
         ],
         border: Border.all(
-          color: const Color(0xFF1565C0).withOpacity(0.1),
+          color: const Color(0xFF6B73FF).withOpacity(0.1),
           width: 1,
         ),
       ),
       child: Column(
         children: [
-          // Header del post con gradiente
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  const Color(0xFF1565C0).withOpacity(0.1),
-                  const Color(0xFF1976D2).withOpacity(0.05),
+                  const Color(0xFF6B73FF).withOpacity(0.1),
+                  const Color(0xFF9DD5EA).withOpacity(0.05),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -308,12 +339,12 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                   height: 45,
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [Color(0xFF1565C0), Color(0xFF1976D2)],
+                      colors: [Color(0xFF6B73FF), Color(0xFF9DD5EA)],
                     ),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF1565C0).withOpacity(0.3),
+                        color: const Color(0xFF6B73FF).withOpacity(0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -339,7 +370,7 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                         post.author,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1565C0),
+                          color: Color(0xFF6B73FF),
                           fontSize: 16,
                         ),
                       ),
@@ -355,25 +386,27 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1565C0).withOpacity(0.2),
+                    color: const Color(0xFF6B73FF).withOpacity(0.2),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Text(
-                    'Comunidad',
+                    'Profesionales',
                     style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1565C0),
+                      color: Color(0xFF6B73FF),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          
-          // Contenido del post
+
           Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -382,14 +415,13 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                 Text(
                   post.content,
                   style: const TextStyle(
-                    color: Color(0xFF424242),
+                    color: Color(0xFF212121),
                     height: 1.6,
                     fontSize: 15,
                   ),
                 ),
                 const SizedBox(height: 15),
-                
-                // Acciones del post mejoradas
+
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
@@ -402,34 +434,21 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                       _buildActionButton(
                         icon: Icons.comment_outlined,
                         label: '${post.comments.length}',
-                        color: const Color(0xFF1565C0),
+                        color: const Color(0xFF6B73FF),
                         onTap: () => _showComments(post),
                       ),
-                      Container(
-                        height: 20,
-                        width: 1,
-                        color: Colors.grey[300],
-                      ),
+                      Container(height: 20, width: 1, color: Colors.grey[300]),
                       _buildActionButton(
-                        icon: post.isLiked ? Icons.favorite : Icons.favorite_border,
+                        icon: Icons.thumb_up_off_alt,
                         label: '${post.likes}',
-                        color: post.isLiked ? Colors.red : const Color(0xFF1565C0),
-                        onTap: () {
-                          setState(() {
-                            post.isLiked = !post.isLiked;
-                            post.likes += post.isLiked ? 1 : -1;
-                          });
-                        },
+                        color: const Color(0xFF6B73FF),
+                        onTap: () {},
                       ),
-                      Container(
-                        height: 20,
-                        width: 1,
-                        color: Colors.grey[300],
-                      ),
+                      Container(height: 20, width: 1, color: Colors.grey[300]),
                       _buildActionButton(
                         icon: Icons.share_outlined,
                         label: 'Compartir',
-                        color: const Color(0xFF1565C0),
+                        color: const Color(0xFF6B73FF),
                         onTap: () {},
                       ),
                     ],
@@ -443,39 +462,7 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
     );
   }
 
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: color, size: 18),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
+  // --- Psychologist-specific tabs: Support Groups, Resources, Events ---
   Widget _buildSupportGroupsTab() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -484,7 +471,7 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
           // Crear nuevo grupo
           _buildCreateGroupCard(),
           const SizedBox(height: 20),
-          
+
           // Lista de grupos
           ..._getSupportGroups().map((group) => _buildSupportGroupCard(group)),
         ],
@@ -514,7 +501,7 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF1565C0),
+              color: Color(0xFF6B73FF),
             ),
           ),
           const SizedBox(height: 15),
@@ -525,7 +512,7 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
             icon: const Icon(Icons.add),
             label: const Text('Crear Nuevo Grupo'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF4CAF50),
+              backgroundColor: const Color(0xFF6B73FF),
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
@@ -560,13 +547,10 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF4CAF50).withOpacity(0.2),
+                  color: const Color(0xFF6B73FF).withOpacity(0.15),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(
-                  group.icon,
-                  color: const Color(0xFF4CAF50),
-                ),
+                child: Icon(group.icon, color: const Color(0xFF6B73FF)),
               ),
               const SizedBox(width: 15),
               Expanded(
@@ -578,15 +562,12 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF4CAF50),
+                        color: Color(0xFF6B73FF),
                       ),
                     ),
                     Text(
                       '${group.members} miembros',
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
+                      style: const TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                   ],
                 ),
@@ -596,7 +577,7 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                   _showJoinGroupDialog(group);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4CAF50),
+                  backgroundColor: const Color(0xFF6B73FF),
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -609,10 +590,7 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
           const SizedBox(height: 10),
           Text(
             group.description,
-            style: const TextStyle(
-              color: Color(0xFF424242),
-              fontSize: 14,
-            ),
+            style: const TextStyle(color: Color(0xFF212121), fontSize: 14),
           ),
         ],
       ),
@@ -624,7 +602,9 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          ..._getEducationalResources().map((resource) => _buildResourceCard(resource)),
+          ..._getEducationalResources().map(
+            (resource) => _buildResourceCard(resource),
+          ),
         ],
       ),
     );
@@ -650,12 +630,12 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFF9C27B0).withOpacity(0.2),
+              color: const Color(0xFF9DD5EA).withOpacity(0.2),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
               resource.icon,
-              color: const Color(0xFF9C27B0),
+              color: const Color(0xFF6B73FF),
               size: 24,
             ),
           ),
@@ -669,46 +649,32 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF9C27B0),
+                    color: Color(0xFF6B73FF),
                   ),
                 ),
                 const SizedBox(height: 5),
                 Text(
                   resource.description,
                   style: const TextStyle(
-                    color: Color(0xFF424242),
+                    color: Color(0xFF212121),
                     fontSize: 14,
                   ),
                 ),
                 const SizedBox(height: 10),
                 Row(
                   children: [
-                    Icon(
-                      Icons.access_time,
-                      size: 14,
-                      color: Colors.grey[600],
-                    ),
+                    Icon(Icons.access_time, size: 14, color: Colors.grey[600]),
                     const SizedBox(width: 5),
                     Text(
                       resource.duration,
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12,
-                      ),
+                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
                     ),
                     const Spacer(),
-                    Icon(
-                      Icons.star,
-                      size: 14,
-                      color: Colors.amber[600],
-                    ),
+                    Icon(Icons.star, size: 14, color: Colors.amber[600]),
                     const SizedBox(width: 5),
                     Text(
                       resource.rating.toString(),
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12,
-                      ),
+                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
                     ),
                   ],
                 ),
@@ -719,7 +685,7 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
             onPressed: () {
               _showResourceDialog(resource);
             },
-            icon: const Icon(Icons.play_circle_fill, color: Color(0xFF9C27B0)),
+            icon: const Icon(Icons.play_circle_fill, color: Color(0xFF6B73FF)),
           ),
         ],
       ),
@@ -760,13 +726,10 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFF9800).withOpacity(0.2),
+                  color: const Color(0xFF9DD5EA).withOpacity(0.2),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(
-                  event.icon,
-                  color: const Color(0xFFFF9800),
-                ),
+                child: Icon(event.icon, color: const Color(0xFF6B73FF)),
               ),
               const SizedBox(width: 15),
               Expanded(
@@ -778,15 +741,12 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFFFF9800),
+                        color: Color(0xFF6B73FF),
                       ),
                     ),
                     Text(
                       event.dateTime,
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
+                      style: const TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                   ],
                 ),
@@ -796,7 +756,7 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
                   _showEventDetails(event);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFF9800),
+                  backgroundColor: const Color(0xFF6B73FF),
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -809,39 +769,32 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
           const SizedBox(height: 10),
           Text(
             event.description,
-            style: const TextStyle(
-              color: Color(0xFF424242),
-              fontSize: 14,
-            ),
+            style: const TextStyle(color: Color(0xFF212121), fontSize: 14),
           ),
           const SizedBox(height: 10),
           Row(
             children: [
-              Icon(
-                Icons.people,
-                size: 14,
-                color: Colors.grey[600],
-              ),
+              Icon(Icons.people, size: 14, color: Colors.grey[600]),
               const SizedBox(width: 5),
               Text(
                 '${event.attendees} participantes',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
               const Spacer(),
               if (event.isOnline)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF4CAF50).withOpacity(0.2),
+                    color: const Color(0xFF6B73FF).withOpacity(0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Text(
                     'En línea',
                     style: TextStyle(
-                      color: Color(0xFF4CAF50),
+                      color: Color(0xFF6B73FF),
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                     ),
@@ -854,268 +807,123 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
     );
   }
 
-  // Métodos para mostrar diálogos y funcionalidades
-  void _showPostCreated() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('¡Tu publicación se ha compartido con la comunidad!'),
-        backgroundColor: Color(0xFF1565C0),
+  Widget _buildActionButton({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Icon(icon, size: 18, color: color),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(color: color, fontWeight: FontWeight.w600),
+          ),
+        ],
       ),
     );
+  }
+
+  void _showPostCreated() {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Publicación creada')));
   }
 
   void _showComments(ForumPost post) {
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => Dialog(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Comentarios',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1565C0),
-                ),
-              ),
-              const SizedBox(height: 15),
-              ...post.comments.map((comment) => _buildCommentItem(comment)),
-              const SizedBox(height: 15),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _commentController,
-                      decoration: InputDecoration(
-                        hintText: 'Escribe un comentario...',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
+      isScrollControlled: true,
+      builder:
+          (_) => Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Comentarios (${post.comments.length})',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 12),
+                      ...post.comments
+                          .map(
+                            (c) => ListTile(
+                              title: Text(c.author),
+                              subtitle: Text(c.content),
+                            ),
+                          )
+                          .toList(),
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: _commentController,
+                        decoration: const InputDecoration(
+                          hintText: 'Escribe un comentario profesional...',
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  IconButton(
-                    onPressed: () {
-                      if (_commentController.text.isNotEmpty) {
-                        _commentController.clear();
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Comentario agregado'),
-                            backgroundColor: Color(0xFF4CAF50),
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cerrar'),
                           ),
-                        );
-                      }
-                    },
-                    icon: const Icon(Icons.send, color: Color(0xFF1565C0)),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCommentItem(Comment comment) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 15,
-            backgroundColor: const Color(0xFF1565C0).withOpacity(0.2),
-            child: Text(
-              comment.author.substring(0, 1),
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF1565C0),
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  comment.author,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: Color(0xFF1565C0),
-                  ),
-                ),
-                Text(
-                  comment.content,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF424242),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Enviar'),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-        ],
-      ),
     );
   }
 
-  void _showCreateGroupDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Crear Grupo de Apoyo'),
-        content: const Text('Esta funcionalidad estará disponible pronto.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Entendido'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showJoinGroupDialog(SupportGroup group) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Unirse a ${group.name}'),
-        content: Text('¿Te gustaría unirte a este grupo de apoyo?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Te has unido a ${group.name}'),
-                  backgroundColor: const Color(0xFF4CAF50),
-                ),
-              );
-            },
-            child: const Text('Unirse'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showResourceDialog(EducationalResource resource) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(resource.title),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(resource.description),
-            const SizedBox(height: 10),
-            Text('Duración: ${resource.duration}'),
-            Text('Rating: ${resource.rating}/5'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cerrar'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Recurso iniciado'),
-                  backgroundColor: Color(0xFF9C27B0),
-                ),
-              );
-            },
-            child: const Text('Comenzar'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showEventDetails(CommunityEvent event) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(event.title),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(event.description),
-            const SizedBox(height: 10),
-            Text('Fecha: ${event.dateTime}'),
-            Text('Participantes: ${event.attendees}'),
-            Text('Tipo: ${event.isOnline ? "En línea" : "Presencial"}'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cerrar'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Te has registrado al evento'),
-                  backgroundColor: Color(0xFFFF9800),
-                ),
-              );
-            },
-            child: const Text('Registrarse'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Datos de ejemplo
+  // Mock data below: kept same as original
   List<ForumPost> _getForumPosts() {
     return [
       ForumPost(
-        author: 'María',
-        content: 'Hoy me siento más tranquila después de practicar mindfulness. ¿Alguien más ha probado esta técnica?',
-        timeAgo: 'hace 2 horas',
+        author: 'Ana (Supervisora)',
+        timeAgo: '2h',
+        content:
+            'Apliqué la técnica X en una sesión con dificultades en regulación afectiva; observé mejoría en la tolerancia a la angustia. ¿Cómo la adaptarían en pacientes con comorbilidad?',
         likes: 12,
-        isLiked: false,
         comments: [
-          Comment(author: 'Carlos', content: '¡Excelente! Yo también la practico diariamente.'),
-          Comment(author: 'Ana', content: '¿Podrías compartir algunos consejos?'),
+          ForumComment(
+            author: 'Luis',
+            content:
+                'Interesante — yo uso una adaptación breve enfocada en exposición interoceptiva.',
+          ),
         ],
       ),
       ForumPost(
         author: 'Carlos',
-        content: 'Comparto mi experiencia con la ansiedad y cómo he aprendido a manejarla mejor.',
-        timeAgo: 'hace 5 horas',
+        timeAgo: '6h',
+        content:
+            'Comparto un recurso sobre abordaje faseado del trauma complejo, útil para trabajo faseado y estabilización.',
         likes: 8,
-        isLiked: true,
         comments: [
-          Comment(author: 'María', content: 'Gracias por compartir, me ayuda mucho.'),
+          ForumComment(
+            author: 'María',
+            content: 'Excelente recurso, gracias por compartir',
+          ),
         ],
       ),
     ];
@@ -1124,22 +932,16 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
   List<SupportGroup> _getSupportGroups() {
     return [
       SupportGroup(
-        name: 'Manejo de Ansiedad',
-        description: 'Grupo de apoyo para personas que enfrentan ansiedad',
+        name: 'Supervisión Clínica',
+        description: 'Espacio para supervisión entre colegas.',
         members: 24,
         icon: Icons.psychology,
       ),
       SupportGroup(
-        name: 'Mindfulness y Meditación',
-        description: 'Practicantes de mindfulness y meditación',
-        members: 18,
+        name: 'Terapias Breves',
+        description: 'Intercambio sobre intervenciones de corta duración.',
+        members: 12,
         icon: Icons.self_improvement,
-      ),
-      SupportGroup(
-        name: 'Apoyo Emocional',
-        description: 'Espacio para compartir emociones y experiencias',
-        members: 32,
-        icon: Icons.favorite,
       ),
     ];
   }
@@ -1147,25 +949,18 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
   List<EducationalResource> _getEducationalResources() {
     return [
       EducationalResource(
-        title: 'Técnicas de Respiración',
-        description: 'Aprende diferentes técnicas de respiración para reducir el estrés',
-        duration: '15 min',
-        rating: 4.8,
-        icon: Icons.air,
-      ),
-      EducationalResource(
-        title: 'Guía de Mindfulness',
-        description: 'Introducción completa al mindfulness y sus beneficios',
-        duration: '30 min',
-        rating: 4.9,
-        icon: Icons.book,
-      ),
-      EducationalResource(
-        title: 'Ejercicios de Relajación',
-        description: 'Rutina de ejercicios para relajar cuerpo y mente',
-        duration: '20 min',
+        title: 'Guía de Entrevista Clínica',
+        description: 'Documento con pautas y preguntas clave.',
+        duration: '12 min',
         rating: 4.7,
-        icon: Icons.spa,
+        icon: Icons.menu_book,
+      ),
+      EducationalResource(
+        title: 'Manejo de Crisis',
+        description: 'Protocolo para atención en crisis.',
+        duration: '25 min',
+        rating: 4.9,
+        icon: Icons.local_hospital,
       ),
     ];
   }
@@ -1173,57 +968,124 @@ class _CommunityMindInteractiveScreenState extends State<CommunityMindInteractiv
   List<CommunityEvent> _getCommunityEvents() {
     return [
       CommunityEvent(
-        title: 'Meditación Grupal',
-        description: 'Sesión de meditación guiada para toda la comunidad',
-        dateTime: 'Sábado 15:00',
-        attendees: 45,
+        title: 'Taller: Trauma complejo',
+        description: 'Sesión sobre abordaje del trauma complejo.',
+        dateTime: 'Sáb 10:00',
+        attendees: 40,
         isOnline: true,
-        icon: Icons.self_improvement,
+        icon: Icons.event,
       ),
       CommunityEvent(
-        title: 'Taller de Ansiedad',
-        description: 'Taller práctico sobre técnicas para manejar la ansiedad',
-        dateTime: 'Domingo 10:00',
-        attendees: 28,
+        title: 'Supervisión en grupo',
+        description: 'Casos y discusión clínica.',
+        dateTime: 'Mar 18:00',
+        attendees: 18,
         isOnline: false,
-        icon: Icons.psychology,
-      ),
-      CommunityEvent(
-        title: 'Grupo de Apoyo',
-        description: 'Reunión semanal del grupo de apoyo emocional',
-        dateTime: 'Lunes 19:00',
-        attendees: 35,
-        isOnline: true,
-        icon: Icons.support,
+        icon: Icons.group,
       ),
     ];
   }
+
+  void _showCreateGroupDialog() {
+    showDialog(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            title: const Text('Crear Grupo'),
+            content: const Text(
+              'Funcionalidad de creación de grupos próximamente.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cerrar'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _showJoinGroupDialog(SupportGroup group) {
+    showDialog(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            title: Text('Unirse a ${group.name}'),
+            content: Text('Solicitar unirse al grupo "${group.name}".'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancelar'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Solicitud enviada')),
+                  );
+                },
+                child: const Text('Solicitar'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _showResourceDialog(EducationalResource resource) {
+    showDialog(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            title: Text(resource.title),
+            content: Text('Reproducción de recurso: ${resource.description}'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cerrar'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _showEventDetails(CommunityEvent event) {
+    showDialog(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            title: Text(event.title),
+            content: Text('${event.description}\n${event.dateTime}'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cerrar'),
+              ),
+            ],
+          ),
+    );
+  }
 }
 
-// Clases de modelo
 class ForumPost {
   final String author;
-  final String content;
   final String timeAgo;
-  int likes;
-  bool isLiked;
-  final List<Comment> comments;
+  final String content;
+  final int likes;
+  final List<ForumComment> comments;
 
   ForumPost({
     required this.author,
-    required this.content,
     required this.timeAgo,
-    required this.likes,
-    required this.isLiked,
-    required this.comments,
+    required this.content,
+    this.likes = 0,
+    this.comments = const [],
   });
 }
 
-class Comment {
+class ForumComment {
   final String author;
   final String content;
-
-  Comment({required this.author, required this.content});
+  ForumComment({required this.author, required this.content});
 }
 
 class SupportGroup {
