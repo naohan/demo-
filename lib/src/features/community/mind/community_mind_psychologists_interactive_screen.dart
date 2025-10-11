@@ -106,6 +106,7 @@ class _CommunityMindPsychologistsInteractiveScreenState
                         children: [
                           Icon(Icons.forum, size: 24),
                           SizedBox(height: 6),
+<<<<<<< HEAD
                           Text(
                             'Foros',
                             style: TextStyle(
@@ -113,6 +114,9 @@ class _CommunityMindPsychologistsInteractiveScreenState
                               fontWeight: FontWeight.w700,
                             ),
                           ),
+=======
+                          Text('Foros', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+>>>>>>> origin/Bryan
                         ],
                       ),
                     ),
@@ -126,6 +130,7 @@ class _CommunityMindPsychologistsInteractiveScreenState
                         children: [
                           Icon(Icons.group, size: 24),
                           SizedBox(height: 6),
+<<<<<<< HEAD
                           Text(
                             'Grupos',
                             style: TextStyle(
@@ -133,6 +138,9 @@ class _CommunityMindPsychologistsInteractiveScreenState
                               fontWeight: FontWeight.w700,
                             ),
                           ),
+=======
+                          Text('Grupos', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+>>>>>>> origin/Bryan
                         ],
                       ),
                     ),
@@ -146,6 +154,7 @@ class _CommunityMindPsychologistsInteractiveScreenState
                         children: [
                           Icon(Icons.library_books, size: 24),
                           SizedBox(height: 6),
+<<<<<<< HEAD
                           Text(
                             'Recursos',
                             style: TextStyle(
@@ -153,6 +162,9 @@ class _CommunityMindPsychologistsInteractiveScreenState
                               fontWeight: FontWeight.w700,
                             ),
                           ),
+=======
+                          Text('Recursos', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+>>>>>>> origin/Bryan
                         ],
                       ),
                     ),
@@ -166,6 +178,7 @@ class _CommunityMindPsychologistsInteractiveScreenState
                         children: [
                           Icon(Icons.event, size: 24),
                           SizedBox(height: 6),
+<<<<<<< HEAD
                           Text(
                             'Eventos',
                             style: TextStyle(
@@ -173,6 +186,9 @@ class _CommunityMindPsychologistsInteractiveScreenState
                               fontWeight: FontWeight.w700,
                             ),
                           ),
+=======
+                          Text('Eventos', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+>>>>>>> origin/Bryan
                         ],
                       ),
                     ),
@@ -414,11 +430,19 @@ class _CommunityMindPsychologistsInteractiveScreenState
               children: [
                 Text(
                   post.content,
+<<<<<<< HEAD
                   style: const TextStyle(
                     color: Color(0xFF212121),
                     height: 1.6,
                     fontSize: 15,
                   ),
+=======
+                    style: const TextStyle(
+                      color: Color(0xFF212121),
+                      height: 1.6,
+                      fontSize: 15,
+                    ),
+>>>>>>> origin/Bryan
                 ),
                 const SizedBox(height: 15),
 

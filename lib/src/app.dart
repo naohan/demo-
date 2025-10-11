@@ -63,9 +63,15 @@ class CalmmindApp extends StatelessWidget {
         //Vista de crear/editar rutina del entrenador
         CreateEditRoutineScreen.route: (context) => const CreateEditRoutineScreen(),
         CommunityMindScreen.route: (_) => const CommunityMindScreen(),
+<<<<<<< HEAD
         CommunityMindInteractiveScreen.route: (_) => const CommunityMindInteractiveScreen(),
   // New screen for psychologist-specific community
   CommunityMindPsychologistsInteractiveScreen.route: (_) => const CommunityMindPsychologistsInteractiveScreen(),
+=======
+  // Map psychologist community route directly to the interactive psychologist screen
+  CommunityMindPsychologistsInteractiveScreen.route: (_) => const CommunityMindPsychologistsInteractiveScreen(),
+  CommunityMindInteractiveScreen.route: (_) => const CommunityMindInteractiveScreen(),
+>>>>>>> origin/Bryan
         CommunityVitalScreen.route: (_) => const CommunityVitalScreen(),
         CommunityVitalInteractiveScreen.route: (_) => const CommunityVitalInteractiveScreen(),
         TrainersScreen.route: (_) => const TrainersScreen(),

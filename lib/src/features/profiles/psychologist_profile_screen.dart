@@ -84,8 +84,8 @@ class _PsychologistProfileScreenState extends State<PsychologistProfileScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF6B73FF).withOpacity(0.1),
-            const Color(0xFF9DD5EA).withOpacity(0.1),
+            const Color(0xFF6B73FF).withOpacity(0.06),
+            const Color(0xFF9DD5EA).withOpacity(0.06),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
@@ -100,25 +100,63 @@ class _PsychologistProfileScreenState extends State<PsychologistProfileScreen> {
       child: Row(
         children: [
           Stack(
+            clipBehavior: Clip.none,
             children: [
+<<<<<<< HEAD
               CircleAvatar(
                 radius: 40,
                 backgroundColor: const Color(0xFF6B73FF).withOpacity(0.2),
                 backgroundImage: const AssetImage('assets/foto/perfil7.jpg'),
+=======
+              // White backdrop to mask the header gradient behind the avatar
+              Container(
+                width: 88,
+                height: 88,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.06),
+                      blurRadius: 6,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+>>>>>>> origin/Bryan
               ),
+              // Avatar with border and image
               Positioned(
-                bottom: 0,
-                right: 0,
+                left: 4,
+                top: 4,
                 child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF2ECC71),
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 3),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/foto/perfil101.jpg'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+              // Verified badge slightly outside the avatar circle
+              Positioned(
+                bottom: -6,
+                right: -6,
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF2ECC71),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
                   ),
                   child: const Icon(
                     Icons.verified,
                     color: Colors.white,
-                    size: 16,
+                    size: 14,
                   ),
                 ),
               ),
