@@ -738,15 +738,34 @@ class _PatientDetailScreenState extends State<PatientDetailScreen>
           ],
         ),
         const SizedBox(height: 16),
-        _buildActionButton(
-          'Mensajes',
-          Icons.send_outlined,
-          const Color(0xFF6366F1),
-          () => Navigator.pushNamed(
-            context,
-            '/patient-messages',
-            arguments: currentPatient!.name,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: _buildActionButton(
+                'Mensajes',
+                Icons.send_outlined,
+                const Color(0xFF6366F1),
+                () => Navigator.pushNamed(
+                  context,
+                  '/patient-messages',
+                  arguments: currentPatient!.name,
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildActionButton(
+                'Recomendar',
+                Icons.recommend_outlined,
+                const Color(0xFFEC4899),
+                () => Navigator.pushNamed(
+                  context,
+                  '/patient-recommendations',
+                  arguments: currentPatient!.name,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
