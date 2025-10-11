@@ -563,7 +563,10 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFF3B82F6), width: 3),
+                      border: Border.all(
+                        color: const Color(0xFF3B82F6),
+                        width: 3,
+                      ),
                       boxShadow: [
                         BoxShadow(
                           color: const Color(0xFF3B82F6).withOpacity(0.2),
@@ -623,7 +626,9 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: _getStatusColor(report.level).withOpacity(0.1),
+                            color: _getStatusColor(
+                              report.level,
+                            ).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
@@ -652,22 +657,19 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
               ),
             ],
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // Segunda fila: Recomendaciones
           Text(
             'Recs: ${report.recommendations}',
-            style: const TextStyle(
-              fontSize: 12,
-              color: Color(0xFF9CA3AF),
-            ),
+            style: const TextStyle(fontSize: 12, color: Color(0xFF9CA3AF)),
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // Tercera fila: Botón de acción
           SizedBox(
             width: double.infinity,
@@ -711,7 +713,10 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
                   children: [
                     Text(
                       'Ver detalle',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     SizedBox(width: 6),
                     Icon(Icons.arrow_forward_ios, size: 14),
@@ -737,115 +742,122 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
   }
 
   List<Appointment> _getTodayAppointments() {
-    return _appointments.where((appointment) => 
-      appointment.status == 'Confirmada' || appointment.status == 'Pendiente'
-    ).toList();
+    return _appointments
+        .where(
+          (appointment) =>
+              appointment.status == 'Confirmada' ||
+              appointment.status == 'Pendiente',
+        )
+        .toList();
   }
 
   void _showAgendaDialog() {
     showDialog(
       context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 20,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF10B981).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.calendar_today,
-                      color: Color(0xFF10B981),
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  const Expanded(
-                    child: Text(
-                      'Agenda de Hoy',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF1F2937),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close),
+      builder:
+          (context) => Dialog(
+            backgroundColor: Colors.transparent,
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 20,
+                    offset: const Offset(0, 5),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-              if (_getTodayAppointments().isEmpty)
-                const Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Text(
-                    'No hay citas programadas para hoy',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFF6B7280),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF10B981).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.calendar_today,
+                          color: Color(0xFF10B981),
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Expanded(
+                        child: Text(
+                          'Agenda de Hoy',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1F2937),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(Icons.close),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  if (_getTodayAppointments().isEmpty)
+                    const Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        'No hay citas programadas para hoy',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF6B7280),
+                        ),
+                      ),
+                    )
+                  else
+                    ..._getTodayAppointments().map(
+                      (appointment) => _buildAppointmentCard(appointment),
                     ),
-                  ),
-                )
-              else
-                ..._getTodayAppointments().map((appointment) => 
-                  _buildAppointmentCard(appointment)
-                ),
-              const SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF10B981), Color(0xFF059669)],
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    _showSnackBar('Funcionalidad de agenda completa próximamente');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
+                  const SizedBox(height: 20),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF10B981), Color(0xFF059669)],
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    elevation: 0,
-                  ),
-                  child: const Text(
-                    'Ver Agenda Completa',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        _showSnackBar(
+                          'Funcionalidad de agenda completa próximamente',
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: const Text(
+                        'Ver Agenda Completa',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
     );
   }
 
@@ -854,14 +866,16 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: appointment.status == 'Confirmada' 
-          ? const Color(0xFF10B981).withOpacity(0.1)
-          : const Color(0xFFF59E0B).withOpacity(0.1),
+        color:
+            appointment.status == 'Confirmada'
+                ? const Color(0xFF10B981).withOpacity(0.1)
+                : const Color(0xFFF59E0B).withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: appointment.status == 'Confirmada'
-            ? const Color(0xFF10B981).withOpacity(0.3)
-            : const Color(0xFFF59E0B).withOpacity(0.3),
+          color:
+              appointment.status == 'Confirmada'
+                  ? const Color(0xFF10B981).withOpacity(0.3)
+                  : const Color(0xFFF59E0B).withOpacity(0.3),
         ),
       ),
       child: Row(
@@ -869,9 +883,10 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: appointment.status == 'Confirmada'
-                ? const Color(0xFF10B981)
-                : const Color(0xFFF59E0B),
+              color:
+                  appointment.status == 'Confirmada'
+                      ? const Color(0xFF10B981)
+                      : const Color(0xFFF59E0B),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -910,9 +925,10 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: appointment.status == 'Confirmada'
-                ? const Color(0xFF10B981)
-                : const Color(0xFFF59E0B),
+              color:
+                  appointment.status == 'Confirmada'
+                      ? const Color(0xFF10B981)
+                      : const Color(0xFFF59E0B),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
@@ -932,183 +948,201 @@ class _HomePsychologistScreenState extends State<HomePsychologistScreen>
   void _showNewNoteDialog() {
     String selectedPatient = _recentReports.first.name;
     final TextEditingController noteController = TextEditingController();
-    final TextEditingController recommendationController = TextEditingController();
+    final TextEditingController recommendationController =
+        TextEditingController();
 
     showDialog(
       context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 20,
-                offset: const Offset(0, 5),
+      builder:
+          (context) => Dialog(
+            backgroundColor: Colors.transparent,
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 20,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: StatefulBuilder(
-            builder: (context, setState) => Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF59E0B).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(
-                        Icons.note_add,
-                        color: Color(0xFFF59E0B),
-                        size: 24,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    const Expanded(
-                      child: Text(
-                        'Nueva Nota Clínica',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF1F2937),
+              child: StatefulBuilder(
+                builder:
+                    (context, setState) => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF59E0B).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Icon(
+                                Icons.note_add,
+                                color: Color(0xFFF59E0B),
+                                size: 24,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            const Expanded(
+                              child: Text(
+                                'Nueva Nota Clínica',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF1F2937),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              icon: const Icon(Icons.close),
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                
-                // Selector de paciente
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF59E0B).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: const Color(0xFFF59E0B).withOpacity(0.3),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Seleccionar Paciente',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF1F2937),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      DropdownButton<String>(
-                        value: selectedPatient,
-                        isExpanded: true,
-                        underline: Container(),
-                        items: _recentReports.map((report) => 
-                          DropdownMenuItem(
-                            value: report.name,
-                            child: Text(report.name),
-                          ),
-                        ).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedPatient = value!;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                
-                // Campo de nota
-                TextField(
-                  controller: noteController,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    labelText: 'Notas de la sesión',
-                    hintText: 'Describe las observaciones y progreso del paciente...',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFFF59E0B)),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                
-                // Campo de recomendaciones
-                TextField(
-                  controller: recommendationController,
-                  maxLines: 2,
-                  decoration: InputDecoration(
-                    labelText: 'Recomendaciones',
-                    hintText: 'Ejercicios, tareas o recomendaciones para el paciente...',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFFF59E0B)),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                
-                // Botones de acción
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey[300],
-                          foregroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
+                        const SizedBox(height: 20),
+
+                        // Selector de paciente
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF59E0B).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: const Color(0xFFF59E0B).withOpacity(0.3),
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Seleccionar Paciente',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF1F2937),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              DropdownButton<String>(
+                                value: selectedPatient,
+                                isExpanded: true,
+                                underline: Container(),
+                                items:
+                                    _recentReports
+                                        .map(
+                                          (report) => DropdownMenuItem(
+                                            value: report.name,
+                                            child: Text(report.name),
+                                          ),
+                                        )
+                                        .toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedPatient = value!;
+                                  });
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                        child: const Text('Cancelar'),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          _showSnackBar('Nota guardada para $selectedPatient');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFF59E0B),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                        const SizedBox(height: 16),
+
+                        // Campo de nota
+                        TextField(
+                          controller: noteController,
+                          maxLines: 3,
+                          decoration: InputDecoration(
+                            labelText: 'Notas de la sesión',
+                            hintText:
+                                'Describe las observaciones y progreso del paciente...',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFF59E0B),
+                              ),
+                            ),
                           ),
                         ),
-                        child: const Text('Guardar Nota'),
-                      ),
+                        const SizedBox(height: 16),
+
+                        // Campo de recomendaciones
+                        TextField(
+                          controller: recommendationController,
+                          maxLines: 2,
+                          decoration: InputDecoration(
+                            labelText: 'Recomendaciones',
+                            hintText:
+                                'Ejercicios, tareas o recomendaciones para el paciente...',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFF59E0B),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Botones de acción
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.grey[300],
+                                  foregroundColor: Colors.black,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text('Cancelar'),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  _showSnackBar(
+                                    'Nota guardada para $selectedPatient',
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFF59E0B),
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text('Guardar Nota'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
     );
   }
 }

@@ -1,3 +1,6 @@
+#mi configuracion 
+.local.properties
+
 # Miscellaneous
 *.class
 *.log
