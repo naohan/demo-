@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../widgets/user_base_layout.dart';
+import '../../../widgets/trainer_base_layout.dart';
 
 class CommunityVitalInteractiveScreen extends StatefulWidget {
   static const route = '/community-vital-interactive';
@@ -31,7 +31,7 @@ class _CommunityVitalInteractiveScreenState extends State<CommunityVitalInteract
 
   @override
   Widget build(BuildContext context) {
-    return UserBaseLayout(
+    return TrainerBaseLayout(
       title: 'Comunidad Vital',
       hero: const Icon(Icons.fitness_center, size: 64),
       child: Container(
